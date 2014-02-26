@@ -1,0 +1,4 @@
+useDynLib(opfp)
+export(opfp, njfp)
+
+

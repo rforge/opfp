@@ -19,18 +19,17 @@ checkSameResult <- function(x, lambdas){
   return(nbError)
 }
 
-lambdas <- c(1:10)
+
 i = 1
 nbEr <- 0
-while( (i < 10^4) & (nbEr == 0)){
+while( (i < 500) & (nbEr == 0)){
   n <- sample.int(n=10^4, size=1)+100
+  lambdas <- c(1:5)*log(n)
   print(paste("Simu-", i, ": n = ", n))
   x <- rnorm(n)
   nbEr<- checkSameResult(x, lambdas)
   x <- rt(n, df=3)
   nbEr<- checkSameResult(x, lambdas)
-  x <- rt(n, df=1)
-  nbEr <- checkSameResult(x, lambdas)
   i = i+1
 }
  

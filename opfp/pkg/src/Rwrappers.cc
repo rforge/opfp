@@ -26,5 +26,10 @@ void colibri_op_R_c (double *profil, int *nbi, double *lambda_, double *mini, do
 double *cout_n){
     colibri_op_c (profil, nbi, lambda_, mini, maxi, origine, cout_n);
   }
+
+void colibri_op_R_c_analysis (double *profil, int *nbi, double *lambda_, double *mini, double *maxi, int *origine,
+double *cout_n, int *nbcandidate){
+    colibri_op_c_analysis (profil, nbi, lambda_, mini, maxi, origine, cout_n, nbcandidate);
+  }
 }
 

@@ -1,4 +1,4 @@
-useDynLib(opfp)
-export(opfp, njfp)
+useDynLib(fpop)
+export(Fpop, fpop_analysis, fpsn,multiBinSeg)
 
 

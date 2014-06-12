@@ -97,3 +97,4 @@ void Liste::resetAllBorders(Polynome2 *poly_)
 	}
 }
 
+

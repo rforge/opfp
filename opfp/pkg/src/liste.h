@@ -65,7 +65,9 @@ public:
   inline
   void insert(Liste * maillon_);
   inline
-  int compte();
+  int compteIntervals();
+  inline
+  int compteCand(int *index, int step);
   inline
   Liste * removeDoublon();
   inline
@@ -130,7 +132,7 @@ void Liste::insert(Liste * maillon_)
   maillon_->setNext(this->getNext());
   this->setNext(maillon_);
 }
-int Liste::compte(){
+int Liste::compteIntervals(){
   Liste *l;
   int tmp = 0;
   l=this;
@@ -140,6 +142,23 @@ int Liste::compte(){
   }
   return(tmp);
 }
+
+
+int Liste::compteCand(int *index, int step){
+  Liste *l;
+  int tmp = 0;
+  l=this;
+  while(l != NULL){
+      if(index[l->getPolynome()->getOrigine()] < step)
+	{
+		index[l->getPolynome()->getOrigine()] = step;
+		tmp = tmp+1;
+	}
+      l=l->getNext();
+  }
+  return(tmp);
+}
+
 Liste * Liste::removeDoublon()
 {
   Liste *next = this->getNext();

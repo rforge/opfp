@@ -73,5 +73,61 @@ double *cout_n)
 	delete(stock);  
 }
 
+// count the number of candidate
+void colibri_op_c_analysis (const double *profil, const int *nbi, const double *lambda_, const double *mini, const double *maxi, int *origine, double *cout_n, int *nbcandidate)
+{
+	int nb=*nbi;
+	double lambda = *lambda_;
+	double min=*mini;
+	double max=*maxi;
+
+	int minPosition=-1;
+	double minCurrent=-10.0;
+	
+	int *index = new int[nb];
+	for(int i =0; i < nb; i++) index[i] = -1;
+	for(int i =0; i < nb; i++) nbcandidate[i] = 0;
+        /* Initialisation of object once and for all */
+	//Polynome2 * p1;
+	Liste * l1;  
+	//Polynome2 * pTest;
+
+	Polynome2 **stock= new Polynome2* [nb]; 
+	for ( int t =0; t < nb; t++ ) stock[t]= new Polynome2();
+		
+         
+	/* Parametrization of the first candidate segmentation (i.e 1 segment from ]0, 1] the min cost is (0 + lambda)  */
+	stock[0]->reset(1.0, -2*profil[0], lambda,  -10);
+	stock[0]->setStatus(2);
+	
+	l1 = new Liste(max, min, stock[0]);
+
+	l1->computeMinOrMax(&minCurrent, &minPosition);
+	cout_n[0] = minCurrent + lambda;
+	origine[0] = minPosition;
+        /* For any new data point t do 1), 2) and 3) */
+	for ( int t =1; t < nb; t++ ){
+        	 /* Slide 1 and Prune */
+		 l1->computeRoots(cout_n[t-1]);
+		 stock[t]->reset(0.0, 0.0, cout_n[t-1],  t);
+		 l1->resetAllBorders(stock[t]);
+		 l1->checkForDoublon();
+		 l1->add(1.0, -2*profil[t], 0.0);
+
+		 /* Compute Min */
+		 l1->computeMinOrMax(&minCurrent, &minPosition);
+		 cout_n[t]=minCurrent + lambda;
+		 origine[t] = minPosition;
+		 //* count candidate *//	
+		 nbcandidate[t] = l1->compteCand(index, t);
+	}
+	  
+	/* free stock */
+	for ( int t =0; t < nb; t++ ) delete(stock[t]);
+	delete(stock);  
+	delete(index);
+}
+
+
 
 

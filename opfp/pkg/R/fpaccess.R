@@ -32,7 +32,9 @@ maxi=max(x)
 		lambda=as.double(lambda),   min=as.double(mini), 
 		max=as.double(maxi), path=integer(n), cost=double(n)
 	, PACKAGE="fpop")
-    A$bkp <- retour_op(A$path, n)
+    A$t.est <- retour_op(A$path, n)
+    A$K <- length(A$t.est)
+    A$J.est <- A$cost[n] - (A$K+1)*lambda 
     return(A);	
 ### return a list with a vector containing the position of the change-points
 } 

@@ -18,7 +18,8 @@
 
 #include <math.h>
 
-#define PlusInfinity 100000
+#include <gsl/gsl_math.h>
+#define PlusInfinity GSL_POSINF
 
 #include <cmath>
 //#include "Node.h"

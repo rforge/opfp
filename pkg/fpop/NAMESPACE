@@ -1,0 +1,4 @@
+useDynLib(fpop)
+export(Fpop, fpop_analysis, fpsn, multiBinSeg)
+
+

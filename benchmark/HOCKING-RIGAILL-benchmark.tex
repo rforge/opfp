@@ -144,7 +144,11 @@ and pDPA, but slower than binseg.
 \end{center}
 
 The plot above shows that fpop is strictly faster than pelt for each
-of the segmentation problems. 
+of the segmentation problems. The violet square indicates a region of
+small times for which the system.time function is inaccurate, so these
+data points can be ignored. In the next section we present results of
+re-timing these data points using the more accurate microbenchmark
+function.
 
 \begin{center}
   \includegraphics[width=\textwidth]{figure-systemtime-arrays-fpop-multiBinSeg}
@@ -169,8 +173,8 @@ repository on R-Forge:
   \includegraphics[width=5in]{figure-microbenchmark-arrays}
 \end{center}
 
-The figure above shows that in general fpop is faster than pelt but
-slower than binseg.
+The figure above shows that in general fpop is faster than pelt, and
+fpop is about the same speed as binseg.
 
 \begin{center}
   \includegraphics[width=\textwidth]{figure-microbenchmark-arrays-fpop-pelt}

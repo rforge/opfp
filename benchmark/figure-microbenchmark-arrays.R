@@ -117,7 +117,7 @@ ggplot()+
   geom_text(aes(0.1, 0.001, label=paste("microbenchmark accurate",
                               "for small times", sep="\n")),
             color="violet")
-pdf("figure-microbenchmark-arrays-fpop-binseg.pdf")
+pdf("figure-microbenchmark-arrays-fpop-binseg.pdf", w=8)
 print(binseg)
 dev.off()
 

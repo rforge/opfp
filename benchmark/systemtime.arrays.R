@@ -1,4 +1,4 @@
-works_with_R("3.1.0",
+works_with_R("3.1.1",
              SegAnnot="1.2",
              fpop="0.0.1",
              Segmentor3IsBack="1.8",

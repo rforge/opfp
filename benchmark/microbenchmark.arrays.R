@@ -1,4 +1,4 @@
-works_with_R("3.1.0",
+works_with_R("3.1.1",
              microbenchmark="1.3.0",
              fpop="2014.7.16",
              changepoint="1.1.2")

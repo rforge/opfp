@@ -11,7 +11,7 @@ figure-systemtime-simulation.pdf: figure-systemtime-simulation.R systemtime.simu
 	R --no-save < $<
 systemtime.arrays.RData: systemtime.arrays.R
 	R --no-save < $<
-microbenchmark.arrays.RData: microbenchmark.arrays.R figure-systemtime-arrays.pdf
+microbenchmark.arrays.RData: microbenchmark.arrays.R 
 	R --no-save < $<
 systemtime.simulation.RData: systemtime.simulation.R
 	R --no-save < $<

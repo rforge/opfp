@@ -1,4 +1,4 @@
-works_with_R("3.1.0", dplyr="0.2", directlabels="2014.6.13", ggplot2="1.0",
+works_with_R("3.1.1", dplyr="0.2", directlabels="2014.6.13", ggplot2="1.0",
              reshape2="1.2.2")
 
 load("systemtime.arrays.RData")

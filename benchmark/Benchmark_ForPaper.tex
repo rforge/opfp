@@ -16,28 +16,30 @@
 \begin{document}
 
 \title{Benchmarking fpop}
-\author{RM, TD, PF, GR}
+\author{RM, TDH, PF, GR}
 \maketitle
 
 \tableofcontents
 
 \section{Empirical evaluation of fpop}
 
-As explain in section \ref{sec:simil-diff-betw} functionnal pruning leads to a better pruning in the sense
-that any point pruned by inequality based pruning will also be pruned by functional pruning.
-However, functionnal pruning is computationnaly more demanding than inequality based pruning. 
-We thus decided to empirically compared the performance of FPOP to PELT, pDPA and binary segmentation (binseg).
+As explained in section \ref{sec:simil-diff-betw} functional pruning
+leads to a better pruning in the following sense: any point pruned by
+inequality-based pruning will also be pruned by functional pruning.
+However, functionnal pruning is computationnaly more demanding than
+inequality based pruning.  We thus decided to empirically compared the
+performance of FPOP to PELT, pDPA and binary segmentation (binseg).
 
 To do so, we implemented FPOP for the quadratic loss in C++.
 More precisely, we considered the cost $C(y_{\tau_j+1:\tau_{j+1}} = \sum_{t=\tau_j+1}^{\tau_{j+1}} (y_t - \bar{y}_{\tau_j+1:\tau_{j+1}})^2,$ where
 $ \bar{y}_{\tau_j+1:\tau_{j+1}} = \frac{1}{\tau_{j+1} - \tau_j} \sum_{t=\tau_j+1}^{\tau_{j+1}} y_t$.
-We assessed the runtimes of FPOP on both real microarray data a as well as synthetic data.
+We assessed the runtimes of FPOP on both real microarray data as well as synthetic data.
 
 There are several differences between FPOP and the other
 algorithms, as shown in the table below.
 \begin{center}
   \begin{tabular}{ccccc}
-    algorithm & models computed & optimal? & implementation & runtime as a function of $K$\\
+    algorithm & models computed & optimal? & implementation & runtime as a function of segments $K$\\
     \hline
     FPOP & 1 & yes & C++  &  ?                  \\
     PELT & 1 & yes & C++  &  decrease \\
@@ -46,15 +48,16 @@ algorithms, as shown in the table below.
   \end{tabular}
 \end{center}
 
-Note that the Binary segmentation heuristic is computationnaly extremely fast. That is 
-because its complexity is on average in $\mathcal{O}(n \log(K_{max})$, furthermore it 
-relies and a few fairly simple operations and hence the constant in front of 
-this big O notation is expected to be quite low.
-For this reason we believe that binary segmentation is good reference point in terms 
-of speed and we do not think it is possible to be much faster. 
+Note that the Binary segmentation heuristic is computationally
+extremely fast. That is because its complexity is on average in
+$\mathcal{O}(n \log K_{\text{max}})$. Furthermore, it relies on a few
+fairly simple operations and hence the constant in front of this big
+$\mathcal O$ notation is expected to be quite low.  For this reason we
+believe that binary segmentation is good reference point in terms of
+speed and we do not think it is possible to be much faster.
 
 
-\section{Speed benchmark: 4467 chromosomes from 
+\subsection{Speed benchmark: 4467 chromosomes from 
   tumor microarrays}
 
 \citet{HOCKING-SegAnnDB} proposed to benchmark the speed of 
@@ -65,11 +68,11 @@ tumor types (leukemia, lymphoma, neuroblastoma, medulloblastoma).
 
 We compared fpop to several other segmentation algorithms: pDPA
 \citep{pruned-dp}, pelt \citep{pelt}, and binary segmentation
-(binseg). 
-For such data, we expect a small number of changes and for all profiles we ran 
-pDPA and binseg with a maximum number of change of 52 ($K_{max}$). 
-In such scenario we expect binary segmentation to be particularly efficient as its complexity
-is on average in $\mathcal{O}(n\log(K_{max})$.
+(binseg).  For such data, we expect a small number of changes and for
+all profiles we ran pDPA and binseg with a maximum number of changes
+$K_{\text{max}}=52$.  In this scenario we expect binary segmentation
+to be particularly efficient as its complexity is on average in
+$\mathcal{O}(n\log K_{max})$.
 
 We used the R \verb|system.time| function to measure
 the execution time of all 4 algorithms on all 4467 segmentation
@@ -79,11 +82,15 @@ R-Forge:
 \url{https://r-forge.r-project.org/projects/opfp/}
 
 
-It can be seen in figure \ref{fig:sys_runtimes_microarray} that in general fpop is faster than pelt
-and pDPA, but about two times slower than binseg. 
-Note that \verb|system.time| is inaccurate for small times, as pointed out in figure \ref{fig:sys_runtimes_microarray} middle and right. 
-For these small profiles we also assessed the performances of fpop, pelt and binseg using the \verb|benchmark/| package
-and confirmed that fpop is faster than pelt and a slower than binseg.
+It can be seen in Figure~\ref{fig:sys_runtimes_microarray} that in
+general fpop is faster than pelt and pDPA, but about two times slower
+than binseg.  Note that \verb|system.time| is inaccurate for small
+times, as pointed out in Figure~\ref{fig:sys_runtimes_microarray}
+middle and right.  For these small profiles we also assessed the
+performances of fpop, pelt and binseg using the \verb|microbenchmark|
+package and confirmed that fpop is faster than pelt. For these small
+problems we were surprised to observe that fpop exhibited about the
+same speed as binseg (microbenchmark results figure not shown).
  
 \begin{figure}\label{fig:sys_runtimes_microarray}
  \parbox{6.5cm}{ \includegraphics[height=5cm]{figure-systemtime-arrays}
@@ -102,7 +109,7 @@ Right) Runtimes of Binseg and fpop for the same profiles.
 
 
 
-\section{Speed benchmark: simulated data with different 
+\subsection{Speed benchmark: simulated data with different 
   number of changes}
 
 The speed of Pelt, Binseg and pDPA depends on the underlying number of changes.
@@ -126,11 +133,14 @@ for these timings is in \verb|benchmark/systemtime.simulation.R| in
 the opfp project repository on R-Forge: \url{https://r-forge.r-project.org/projects/opfp/}.
 
 It can be seen on figure \ref{fig:simu_numberK} that fpop is always faster than pDPA and pelt. 
-Interestingly for both $n=2.10^5$ and $10^7$ it is faster than binseg for a true number of change-point larger than 500.
+Interestingly for both $n=2\times 10^5$ and $10^7$ it is faster than binseg for a true number of change-point larger than 500.
+
 
 \begin{figure}\label{fig:simu_numberK}
-  \includegraphics[width=8cm]{figure-systemtime-simulation}
+  \begin{center}
+      \includegraphics[width=8cm]{figure-systemtime-simulation}
     \includegraphics[width=8cm]{figure-systemtime-simulationLarge}
+  \end{center}
 \caption{Runtimes as a function of the true number of change-points.
 Left) For fpop, pelt,
 pDPA and Binseg and $n=2. 10^5$

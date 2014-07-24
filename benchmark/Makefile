@@ -1,3 +1,12 @@
+Benchmark_ForPaper.pdf: Benchmark_ForPaper.tex refs.bib figure-systemtime-simulationLarge.pdf figure-systemtime-arrays.pdf
+	pdflatex Benchmark_ForPaper
+	bibtex Benchmark_ForPaper
+	pdflatex Benchmark_ForPaper
+	pdflatex Benchmark_ForPaper
+figure-systemtime-simulationLarge.pdf: figure-systemtime-simulationLarge.R systemtime.simulationLarge.RData
+	R --no-save < $<
+systemtime.simulationLarge.RData: systemtime.simulationLarge.R
+	R --no-save < $<
 HOCKING-RIGAILL-benchmark.pdf: HOCKING-RIGAILL-benchmark.tex refs.bib figure-systemtime-arrays.pdf figure-microbenchmark-arrays.png figure-systemtime-simulation.pdf 
 	pdflatex HOCKING-RIGAILL-benchmark
 	bibtex HOCKING-RIGAILL-benchmark

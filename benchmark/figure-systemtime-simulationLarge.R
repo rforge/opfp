@@ -2,8 +2,8 @@ works_with_R("3.1.1", dplyr="0.2", directlabels="2014.6.13", ggplot2="1.0")
 
 load("systemtime.simulationLarge.RData")
 
-refs <- data.frame(unit=c( "10 seconds"),
-                   seconds=c( 10))
+refs <- data.frame(unit=c("1 second", "1 minute"),
+                   seconds=c(1, 60))
 timings <- systemtime.simulation %.%
   mutate(models=ifelse(algorithm %in%
            c("fpop", "pelt"),

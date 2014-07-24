@@ -16,8 +16,13 @@ seg.funs <-
 		return(timings)
   }, 
 	pelt=function(one.chrom, Kmax=NA){
-		system.time( cpt.mean(one.chrom, method="PELT", penalty="Manual",
+		if(Kmax >= 20){
+		timings <- system.time( cpt.mean(one.chrom, method="PELT", penalty="Manual",
              pen.value=log(length(one.chrom))) )[["user.self"]]
+		} else {
+		timings <- NA
+		}
+		return(timings)
   }, 
 	fpop=function(one.chrom, Kmax=NA){
 		system.time( Fpop(one.chrom, log(length(one.chrom))) )[["user.self"]]
@@ -30,7 +35,7 @@ seg.funs <-
 ###########################################
 n <-2*10^5
 repet <- 4
-K <- c(seq(1, 50, by =4), seq(75, 500, by =50), seq(10^3, 10^4, by =1000))
+K <- c(seq(1, 50, by =4), seq(75, 2000, by =50), seq(2*10^3, 10^4, by =1000))
 set.seed(100)
 signal.list <- list()
 iS <- 1

@@ -1,9 +1,9 @@
 works_with_R("3.1.1", dplyr="0.2", directlabels="2014.6.13", ggplot2="1.0")
 
-load("systemtime.simulation.RData")
+load("systemtime.simulationLarge.RData")
 
-refs <- data.frame(unit=c("1 second", "1 minute"),
-                   seconds=c(1, 60))
+refs <- data.frame(unit=c( "10 seconds"),
+                   seconds=c( 10))
 timings <- systemtime.simulation %.%
   mutate(models=ifelse(algorithm %in%
            c("fpop", "pelt"),
@@ -26,11 +26,11 @@ with.leg <-
   theme_grey()+
   scale_x_log10("number of true of changes",
                 breaks=10^seq(0, 5, by=1),
-                limits=c(0.5, 1e4),
+                limits=c(0.5, 2e4),
                 minor_breaks=NULL)+
   scale_y_log10("seconds",
                 minor_breaks=NULL,
-                breaks=10^seq(-3, 3, by=1))+
+                breaks=10^seq(-3,3, by=1))+
   ggtitle(tit)
 
 pos.method <-
@@ -44,7 +44,7 @@ pos.method <-
 
 dl <- direct.label(with.leg, pos.method)
 
-pdf("figure-systemtime-simulation.pdf")
+pdf("figure-systemtime-simulationLarge.pdf")
 print(dl)
 dev.off()
 

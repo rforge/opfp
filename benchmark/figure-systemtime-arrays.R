@@ -124,7 +124,7 @@ scatter <-
              data=data.frame(wide, competitor="binseg"),
              pch=1)+
   facet_grid(. ~ competitor, labeller=function(var, val){
-    paste0("competitor = ", val)
+    paste0("competitor: ", val)
   }, scales="free", space="free_x")+
   scale_x_log10("competitor (seconds)",
                 minor_breaks=NULL,

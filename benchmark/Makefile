@@ -1,4 +1,4 @@
-Benchmark_ForPaper.pdf: Benchmark_ForPaper.tex refs.bib figure-systemtime-simulationLarge.pdf figure-systemtime-arrays.pdf
+Benchmark_ForPaper.pdf: Benchmark_ForPaper.tex refs.bib figure-systemtime-simulationLarge.pdf figure-systemtime-simulation.pdf figure-systemtime-arrays.pdf
 	pdflatex Benchmark_ForPaper
 	bibtex Benchmark_ForPaper
 	pdflatex Benchmark_ForPaper

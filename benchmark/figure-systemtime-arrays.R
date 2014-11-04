@@ -1,8 +1,12 @@
 works_with_R("3.1.1", dplyr="0.2", directlabels="2014.6.13", ggplot2="1.0",
              reshape2="1.2.2")
 
+
 load("systemtime.arrays.RData")
 
+require(ggplot2)
+require(dplyr)
+require(directlabels)
 refs <- data.frame(unit=c("1 second","1 minute"),
                    seconds=c(1, 60))
 small.refs <- refs[1,]

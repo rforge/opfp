@@ -22,7 +22,7 @@ checkSameResult <- function(x, lambdas){
 
 i = 1
 nbEr <- 0
-while( (i < 300) & (nbEr == 0)){
+while( (i < 1) & (nbEr == 0)){
   n <- sample.int(n=10^4, size=1)+100
   lambdas <- c(1:5)*log(n)
   print(paste("Simu-", i, ": n = ", n))

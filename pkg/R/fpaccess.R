@@ -17,7 +17,8 @@ i
 }
 
 Fpop <- function
-### Function calling the fpop algorithm, use functional pruning and optimal partionning. It is implemented for the L2-loss functon
+### Function calling the fpop algorithm, use functional pruning and optimal partionning to recover the best segmentation
+### with respect to the L2 loss with a per change-point penalty of lambda.
 (x, 
 ### A vector of double : the signal to be segmented
 lambda, 
@@ -34,9 +35,9 @@ maxi=max(x)
 	, PACKAGE="fpop")
     A$t.est <- retour_op(A$path, n)
     A$K <- length(A$t.est)
-    A$J.est <- A$cost[n] - (A$K+1)*lambda 
+    A$J.est <- A$cost[n] - (A$K+1)*lambda + sum(x^2)
     return(A);	
-### return a list with a vector containing the position of the change-points
+### return a list with a vector t.est containing the position of the change-points
 } 
 
 fpop_analysis <- function
@@ -59,17 +60,12 @@ maxi=max(x)
 ### return a list with a vector containing the position of the change-points t.est
 } 
 
-##### nj function pruning access
-##### return 
-##### t.est a matrix of size Kmax x Kmax with the position of the best breaks for a segmentation in k from 1 to Kmax
-##### J.est the cost of the best segmentation in k from 1 to Kmax
-##### it is just a link to cghseg
-fpsn <- function
-### Function to run the pDPA algorithm with the L2 loss (it is a wrapper to cghseg for now)
+
+Fpsn <- function
+### Function to run the pDPA algorithm with the L2 loss (it is a wrapper to cghseg)
 (x, 
 ### A vector of double : the signal to be segmented
 Kmax
-### Maximum number of segments. The snfp will recover all the best segmentation w.r.t. to the L2 in 1 to Kmax segments
 ){
 	cghseg:::segmeanCO(x, Kmax)
 ### return a list with a J.est vector containing the L2 loss and a t.est matrix with the changes of the segmentations in 1 to Kmax

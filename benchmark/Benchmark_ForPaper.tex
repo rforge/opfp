@@ -1,5 +1,6 @@
 \documentclass{article}
 \usepackage[cm]{fullpage}
+\usepackage{tikz}
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{natbib}
@@ -138,7 +139,7 @@ Interestingly for both $n=2\times 10^5$ and $10^7$ it is faster than binseg for 
 
 \begin{figure}\label{fig:simu_numberK}
   \begin{center}
-      \includegraphics[width=8cm]{figure-systemtime-simulation-small}
+    \includegraphics[width=8cm]{figure-systemtime-simulation-small}
     \includegraphics[width=8cm]{figure-systemtime-simulationLarge-small}
   \end{center}
 \caption{Runtimes as a function of the true number of change-points.
@@ -151,6 +152,24 @@ Right) For Binseg and fpop and $n=10^7$
 
 
 \subsection{Accuracy benchmark: the neuroblastoma data set}
+
+\begin{table}
+  \centering
+  \parbox{3in}{
+    \input{table-neuroblastoma-test-error}
+  }
+  \parbox{3in}{
+
+    \input{figure-neuroblastoma-test-error}
+  }
+  \caption{Test error in neuroblastoma data set (percent incorrect labels,
+    mean and standard deviation over 6 test folds). Note that pelt=pDPA=fpop 
+    since these three algorithms recover the exact same segmentation.
+    The ``default'' algorithms ignore the labels in the training set; 
+    other algorithms pick the best scalar penalty or threshold
+    using the training labels.}
+  \label{tab:neuroblastoma-test-error}
+\end{table}
 
 \citet{HOCKING-breakpoints} proposed to benchmark the breakpoint
 detection accuracy of segmentation models by using annotated regions

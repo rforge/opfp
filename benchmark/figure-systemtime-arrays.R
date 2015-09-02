@@ -11,7 +11,8 @@ refs <- data.frame(unit=c("1 second","1 minute"),
                    seconds=c(1, 60))
 small.refs <- refs[1,]
 abbrevs <- c(pelt.SIC="pelt", fpop.SIC="fpop",
-             cghseg.52="pDPA", multiBinSeg.52="binseg")
+             cghseg.52="pDPA", multiBinSeg.52="binseg",
+             wbs="wbs")
 timings <- systemtime.arrays %.%
   filter(!grepl("dnacopy", algorithm)) %.%
   mutate(models=ifelse(algorithm %in%
@@ -25,7 +26,7 @@ tit <-
         "tumor chromosome segmentation problems (system.time)")
 algo.colors <-
   c(pDPA="#1B9E77", pelt="#D95F02", fpop="#7570B3", binseg="#E7298A",
-    "#66A61E", "#E6AB02",  "#A6761D", "#666666")
+    "#66A61E", SNIP="#E6AB02", wbs="#A6761D", "#666666")
 
 wide <- dcast(timings, pid.chr ~ algorithm, value.var="seconds")
 faster.counts <- wide %.%
@@ -40,7 +41,7 @@ faster.labels <-
                        faster.counts$pelt.faster),
                sprintf("fpop=pelt\n%d problems",
                        faster.counts$same.speed)))
-ref.color <- "red"
+ref.color <- "grey"
 segs <-
   data.frame(x=c(-1.5,-1.75),
              y=c(-1.15,-2.15),
@@ -108,8 +109,8 @@ binseg.inacc <- wide %.%
          multiBinSeg.52 < 0.01)
 scatter <-
   ggplot()+
-  geom_rect(aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
-            fill="violet", alpha=1/2, data=inacc.rects)+
+  ## geom_rect(aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
+  ##           fill="violet", alpha=1/2, data=inacc.rects)+
   geom_abline(aes(slope=slope, intercept=intercept),
               data=data.frame(slope=1, intercept=0))+
   geom_hline(aes(yintercept=seconds),
@@ -136,16 +137,16 @@ scatter <-
   scale_y_log10("fpop (seconds)",
                 minor_breaks=NULL,
                 breaks=10^seq(-2, 0, by=1))+
-  geom_text(aes(x, y, label=label),
-            data=data.frame(inaccurate, competitor="pelt"),
-            color="violet", hjust=0, size=3)+
-  geom_text(aes(x, y, label=label),
-            data=data.frame(x=0.0115, y=0.006,
-              competitor="binseg",
-              label=paste("system.time inaccurate\nfor",
-                nrow(binseg.inacc), "problems")),
-            color="violet", hjust=0, size=3)+
-  theme_grey()
+  ## geom_text(aes(x, y, label=label),
+  ##           data=data.frame(inaccurate, competitor="pelt"),
+  ##           color="violet", hjust=0, size=3)+
+  ## geom_text(aes(x, y, label=label),
+  ##           data=data.frame(x=0.0115, y=0.006,
+  ##             competitor="binseg",
+  ##             label=paste("system.time inaccurate\nfor",
+  ##               nrow(binseg.inacc), "problems")),
+  ##           color="violet", hjust=0, size=3)+
+  theme_bw()
 
 pdf("figure-systemtime-arrays-fpop-pelt-small.pdf", w=7, h=3)
 print(scatter)
@@ -199,14 +200,15 @@ dev.off()
 
 with.leg <-
   ggplot()+
-  geom_hline(aes(yintercept=seconds), data=refs)+
+  geom_hline(aes(yintercept=seconds), data=refs, color="grey")+
   geom_text(aes(25, seconds, label=unit),
-            data=refs, vjust=1.5, hjust=0)+
+            data=refs, vjust=1.5, hjust=0,
+            color="grey")+
   geom_point(aes(probes, seconds, color=abbrev),
              data=timings, pch=1)+
   scale_shape_manual(values=c(one=1, several=19))+
   scale_color_manual(values=algo.colors)+
-  theme_grey()+
+  theme_bw()+
   scale_x_log10("number of data points to segment",
                 limits=10^c(1.3, 5.9),
                 minor_breaks=NULL,

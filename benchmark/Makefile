@@ -1,8 +1,10 @@
-Benchmark_ForPaper.pdf: Benchmark_ForPaper.tex refs.bib figure-systemtime-simulationLarge.pdf figure-systemtime-simulation.pdf figure-systemtime-arrays.pdf
+Benchmark_ForPaper.pdf: Benchmark_ForPaper.tex refs.bib figure-systemtime-simulationLarge.pdf figure-systemtime-simulation.pdf figure-systemtime-arrays.pdf table-neuroblastoma-test-error.tex
 	pdflatex Benchmark_ForPaper
 	bibtex Benchmark_ForPaper
 	pdflatex Benchmark_ForPaper
 	pdflatex Benchmark_ForPaper
+table-neuroblastoma-test-error.tex: table-neuroblastoma-test-error.R
+	R --no-save < $<
 figure-systemtime-simulationLarge.pdf: figure-systemtime-simulationLarge.R systemtime.simulationLarge.RData
 	R --no-save < $<
 systemtime.simulationLarge.RData: systemtime.simulationLarge.R

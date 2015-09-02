@@ -2,21 +2,32 @@
 ### using a constant signal size and varying true number of changes
 ### PrunedDP-cghseg/PrunedDP-segmentor/fpop/pelt/dnacopy/binary segmentation.
 require(changepoint)
+require(wbs)
 require(cghseg)
 require(fpop)
 ##########################################
 seg.funs <-
   list(
 	pDPA=function(one.chrom, Kmax){
-		if(Kmax <= 200){
+		if(Kmax <= 500){
 		timings <- system.time( cghseg:::segmeanCO(one.chrom, Kmax) )[["user.self"]]
 		} else {
 		timings <- NA
 		}
 		return(timings)
   }, 
+    wbs=function(one.chrom, Kmax){
+          if(Kmax <= 500){
+            system.time({
+              w <- wbs(one.chrom)
+              changepoints(w, Kmax=Kmax)
+            })[["user.self"]]
+          } else {
+            NA
+          }
+  }, 
 	pelt=function(one.chrom, Kmax=NA){
-		if(Kmax >= 20){
+		if(Kmax >= 1){
 		timings <- system.time( cpt.mean(one.chrom, method="PELT", penalty="Manual",
              pen.value=log(length(one.chrom))) )[["user.self"]]
 		} else {

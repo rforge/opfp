@@ -1,6 +1,8 @@
-works_with_R("3.1.1",
+works_with_R("3.2.2",
+             wbs="1.1",
+             microbenchmark="1.4.2",
              SegAnnot="1.2",
-             fpop="0.0.1",
+             fpop="2014.7.16",
              Segmentor3IsBack="1.8",
              changepoint="1.1.2",
              DNAcopy="1.36.0",
@@ -14,22 +16,52 @@ if(!file.exists("signal.list.RData")){
 }
 load("signal.list.RData")
 
+run.wbs <- function(pro, th.const.vals){
+  require(wbs)
+  each.chrom(pro, function(chr){
+    Y <- chr$logratio
+    mean.mat <- matrix(NA, length(th.const.vals), length(Y))
+    if(nrow(chr) >= 2){
+      set.seed(1)
+      w <- wbs(Y)
+      list.or.na <- changepoints(w, th.const=th.const.vals)$cpt.th
+      if(is.list(list.or.na)){
+        for(param.i in seq_along(list.or.na)){
+          changes <- sort(list.or.na[[param.i]])
+          ends <- c(changes, length(Y))
+          starts <- c(1, changes+1)
+          for(seg.i in seq_along(starts)){
+            start <- starts[[seg.i]]
+            end <- ends[[seg.i]]
+            mean.mat[param.i, start:end] <- mean(Y[start:end])
+          }
+        }
+      }
+    }
+    mean.mat
+  })
+}
+
 seg.funs <-
-  list(cghseg.52=function(one.chrom){
+  list(wbs=function(one.chrom){
+    wbs(one.chrom$logratio)
+  },cghseg.52=function(one.chrom){
     kmax <- min(52, nrow(one.chrom))
     with(one.chrom, run.cghseg(logratio, position, kmax))
-  }, dnacopy.sd=function(one.chrom){
-    probes <- nrow(one.chrom)
-    cna <- with(one.chrom, {
-      CNA(logratio, rep(1, probes), maploc=position)
-    })
-    sdvals <- sort(c(seq(20, 4, l = 20), 2^seq(2.5, -5, l = 10)[-1], 3, 0))
-    for(param.i in seq_along(sdvals)){
-      undo.SD <- sdvals[[param.i]]
-      segment(cna, undo.SD=undo.SD, undo.splits="sdundo",
-              verbose=0)
-    }
-  }, dnacopy.default=function(one.chrom){
+  },
+  ##      dnacopy.sd=function(one.chrom){
+  ##   probes <- nrow(one.chrom)
+  ##   cna <- with(one.chrom, {
+  ##     CNA(logratio, rep(1, probes), maploc=position)
+  ##   })
+  ##   sdvals <- sort(c(seq(20, 4, l = 20), 2^seq(2.5, -5, l = 10)[-1], 3, 0))
+  ##   for(param.i in seq_along(sdvals)){
+  ##     undo.SD <- sdvals[[param.i]]
+  ##     segment(cna, undo.SD=undo.SD, undo.splits="sdundo",
+  ##             verbose=0)
+  ##   }
+  ## },
+       dnacopy.default=function(one.chrom){
     probes <- nrow(one.chrom)
     cna <- with(one.chrom, {
       CNA(logratio, rep(1, probes), maploc=position)
@@ -80,21 +112,22 @@ seg.funs <-
 
 ## TODO: scatterplot pelt vs fpop (coord_equal). Expect pelt > fpop.
     
-systemtime.arrays <- NULL
+systemtime.arrays.list <- list()
 for(pid.chr.i in seq_along(signal.list)){
   pid.chr <- names(signal.list)[pid.chr.i]
   cat(sprintf("%4d / %4d %s\n", pid.chr.i, length(signal.list), pid.chr))
   one.chrom <- signal.list[[pid.chr]]
+  m.args <- list(times=1)
+  probes <- nrow(one.chrom)
   for(algorithm in names(seg.funs)){
-    fun <- seg.funs[[algorithm]]
-    seconds <- system.time({
-      fun(one.chrom)
-    })[["user.self"]]
-    probes <- nrow(one.chrom)
-    systemtime.arrays <- rbind(systemtime.arrays, {
-      data.frame(algorithm, pid.chr, probes, seconds)
-    })
+    m.args[[algorithm]] <-
+      substitute(fun(one.chrom), list(fun=seg.funs[[algorithm]]))
   }
+  times <- do.call(microbenchmark, m.args)
+  seconds <- times$time/1e9
+  systemtime.arrays.list[[pid.chr]] <- 
+    data.frame(algorithm=times$expr, pid.chr, probes, seconds)
 }
+systemtime.arrays <- do.call(rbind, systemtime.arrays.list)
 
 save(systemtime.arrays, file="systemtime.arrays.RData")

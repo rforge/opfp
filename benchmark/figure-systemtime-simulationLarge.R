@@ -20,12 +20,12 @@ tit <-
         "simulated segmentation problems (system.time)")
 with.leg <-
   ggplot()+
-  geom_hline(aes(yintercept=seconds), data=refs)+
+  geom_hline(aes(yintercept=seconds), data=refs, color="grey")+
   geom_text(aes(10^4, seconds, label=unit, vjust=vjust),
-            data=refs, hjust=1, size=4)+
+            data=refs, hjust=1, size=4, color="grey")+
   geom_point(aes(Ktrue, seconds, color=algorithm),
              data=timings, pch=1)+
-  theme_grey()+
+  theme_bw()+
   scale_color_manual(values=algo.colors)+
   scale_x_log10("number of true of changes",
                 breaks=10^seq(0, 5, by=1),
@@ -54,14 +54,14 @@ dev.off()
 with.leg <-
   ggplot()+
   scale_color_manual(values=algo.colors)+
-  geom_hline(aes(yintercept=seconds), data=refs)+
+  geom_hline(aes(yintercept=seconds), data=refs, color="grey")+
   geom_text(aes(10^4, seconds, label=unit, vjust=vjust),
-            data=refs, hjust=1)+
+            data=refs, hjust=1, color="grey")+
   geom_point(aes(Ktrue, seconds, color=algorithm,
                  shape=models),
              data=timings)+
   scale_shape_manual(values=c(one=1, several=19))+
-  theme_grey()+
+  theme_bw()+
   scale_x_log10("number of true of changes",
                 breaks=10^seq(0, 5, by=1),
                 limits=c(0.5, 2e4),

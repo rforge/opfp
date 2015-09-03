@@ -76,10 +76,10 @@ scatter <-
   ggtitle("4467 tumor chromosome segmentation problems (system.time)")+
   scale_x_log10("seconds to compute 1 segmentation using pelt",
                 minor_breaks=NULL,
-                breaks=10^seq(-2, 1, by=1))+
+                breaks=10^seq(-4, 1, by=1))+
   scale_y_log10("seconds to compute 1 segmentation using fpop",
                 minor_breaks=NULL,
-                breaks=10^seq(-2, 0, by=1))+
+                breaks=10^seq(-4, 0, by=1))+
   theme_grey()+
   geom_text(aes(x, y, label=label),
             data=inaccurate, color="violet", hjust=0)
@@ -133,10 +133,10 @@ scatter <-
   }, scales="free", space="free_x")+
   scale_x_log10("competitor (seconds)",
                 minor_breaks=NULL,
-                breaks=10^seq(-2, 1, by=1))+
+                breaks=10^seq(-4, 1, by=1))+
   scale_y_log10("fpop (seconds)",
                 minor_breaks=NULL,
-                breaks=10^seq(-2, 0, by=1))+
+                breaks=10^seq(-4, 0, by=1))+
   ## geom_text(aes(x, y, label=label),
   ##           data=data.frame(inaccurate, competitor="pelt"),
   ##           color="violet", hjust=0, size=3)+
@@ -203,6 +203,7 @@ with.leg <-
   geom_hline(aes(yintercept=seconds), data=refs, color="grey")+
   geom_text(aes(25, seconds, label=unit),
             data=refs, vjust=1.5, hjust=0,
+            size=4,
             color="grey")+
   geom_point(aes(probes, seconds, color=abbrev),
              data=timings, pch=1)+
@@ -213,9 +214,10 @@ with.leg <-
                 limits=10^c(1.3, 5.9),
                 minor_breaks=NULL,
                 breaks=c(10^seq(2, 4, by=1), range(timings$probes)))+
-  scale_y_log10("seconds",labels=function(x)sprintf("%.2f", x),
+  scale_y_log10("seconds",
+                ##labels=function(x)sprintf("%.2f", x),
                 minor_breaks=NULL,
-                breaks=10^seq(-2, 4, by=1))
+                breaks=10^seq(-4, 4, by=1))
 pos.method <-
   list("last.points",
        "calc.boxes",
@@ -245,7 +247,7 @@ with.leg <-
                 breaks=c(10^seq(2, 4, by=1), range(timings$probes)))+
   scale_y_log10("seconds",labels=function(x)sprintf("%.2f", x),
                 minor_breaks=NULL,
-                breaks=10^seq(-2, 4, by=1))+
+                breaks=10^seq(-4, 4, by=1))+
   ggtitle(tit)
 print(with.leg)
 

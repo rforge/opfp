@@ -1,6 +1,5 @@
-works_with_R("3.1.1", dplyr="0.2", directlabels="2014.6.13", ggplot2="1.0",
+works_with_R("3.2.2", dplyr="0.4.2", directlabels="2014.6.13", ggplot2="1.0.1",
              reshape2="1.2.2")
-
 
 load("systemtime.arrays.RData")
 
@@ -13,8 +12,8 @@ small.refs <- refs[1,]
 abbrevs <- c(pelt.SIC="pelt", fpop.SIC="fpop",
              cghseg.52="pDPA", multiBinSeg.52="binseg",
              wbs="wbs")
-timings <- systemtime.arrays %.%
-  filter(!grepl("dnacopy", algorithm)) %.%
+timings <- systemtime.arrays %>%
+  filter(!grepl("dnacopy", algorithm)) %>%
   mutate(models=ifelse(algorithm %in%
            c("fpop.SIC", "pelt.SIC", "dnacopy.default"),
            "one", "several"),
@@ -29,7 +28,7 @@ algo.colors <-
     "#66A61E", SNIP="#E6AB02", wbs="#A6761D", "#666666")
 
 wide <- dcast(timings, pid.chr ~ algorithm, value.var="seconds")
-faster.counts <- wide %.%
+faster.counts <- wide %>%
   summarise(fpop.faster=sum(pelt.SIC > fpop.SIC),
             same.speed=sum(pelt.SIC == fpop.SIC),
             pelt.faster=sum(pelt.SIC < fpop.SIC))
@@ -104,7 +103,7 @@ inacc.rects <-
 both.refs <-
   rbind(data.frame(refs, competitor="pelt"),
         data.frame(small.refs, competitor="binseg"))
-binseg.inacc <- wide %.%
+binseg.inacc <- wide %>%
   filter(fpop.SIC < 0.01,
          multiBinSeg.52 < 0.01)
 scatter <-
@@ -112,13 +111,14 @@ scatter <-
   ## geom_rect(aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
   ##           fill="violet", alpha=1/2, data=inacc.rects)+
   geom_abline(aes(slope=slope, intercept=intercept),
-              data=data.frame(slope=1, intercept=0))+
+              data=data.frame(slope=1, intercept=0),
+              color="grey")+
   geom_hline(aes(yintercept=seconds),
              data=small.refs, color=ref.color)+
   geom_vline(aes(xintercept=seconds),
              data=both.refs,
              color=ref.color)+
-  geom_text(aes(seconds, 10^-0.5, label=unit),
+  geom_text(aes(seconds, 10^-3, label=unit),
              data=both.refs, color=ref.color, angle=90, vjust=-0.5, size=4)+
   geom_text(aes(1e-2, seconds, label=unit),
             data=small.refs, vjust=1.5, hjust=0, color=ref.color, size=4)+
@@ -148,11 +148,11 @@ scatter <-
   ##           color="violet", hjust=0, size=3)+
   theme_bw()
 
-pdf("figure-systemtime-arrays-fpop-pelt-small.pdf", w=7, h=3)
+pdf("figure-systemtime-arrays-fpop-pelt-small.pdf", w=6, h=3)
 print(scatter)
 dev.off()#;system("evince figure-systemtime-arrays-fpop-pelt-small.pdf")
 
-binseg.counts <- wide %.%
+binseg.counts <- wide %>%
   summarise(fpop.faster=sum(multiBinSeg.52 > fpop.SIC),
             same.speed=sum(multiBinSeg.52 == fpop.SIC),
             binseg.faster=sum(multiBinSeg.52 < fpop.SIC))
@@ -237,7 +237,6 @@ with.leg <-
   geom_point(aes(probes, seconds, color=abbrev,
                  shape=models),
              data=timings)+
-  scale_shape_manual(values=c(one=1, several=19))+
   scale_color_manual(values=algo.colors)+
   theme_grey()+
   scale_x_log10("number of data points to segment",

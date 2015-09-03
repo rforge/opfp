@@ -22,7 +22,7 @@ with.leg <-
   ggplot()+
   geom_hline(aes(yintercept=seconds), data=refs, color="grey")+
   geom_text(aes(10^4, seconds, label=unit, vjust=vjust),
-            data=refs, hjust=1, size=4, color="grey")+
+            data=refs, hjust=1, size=3.5, color="grey")+
   geom_point(aes(Ktrue, seconds, color=algorithm),
              data=timings, pch=1)+
   theme_bw()+

@@ -94,16 +94,18 @@ problems we were surprised to observe that fpop exhibited about the
 same speed as binseg (microbenchmark results figure not shown).
  
 \begin{figure}\label{fig:sys_runtimes_microarray}
- \parbox{6.5cm}{ \includegraphics[height=5cm]{figure-systemtime-arrays-small}
-  } \parbox{12.5cm}{  \includegraphics[width=\linewidth]{figure-systemtime-arrays-fpop-pelt-small}}
+ \parbox{7.5cm}{ 
+   \includegraphics[width=\linewidth]{figure-systemtime-arrays-small}
+  }
+  \parbox{11.5cm}{  
+    \includegraphics[width=\linewidth]{figure-systemtime-arrays-fpop-pelt-small}
+  }
   %\parbox{6cm}{ \includegraphics[height=5cm]{figure-systemtime-arrays-fpop-multiBinSeg}}
- 
-
-\caption{Left) Runtimes of fpop, pelt,
-pDPA and Binseg as a function of the length of the profile  using  on the tumor micro array benchmark. 
-Middle) Runtimes of pelt and fpop for the same profiles.
-Right) Runtimes of Binseg and fpop for the same profiles.
-}
+  \caption{Left) Runtimes of fpop, pelt, pDPA and Binseg as a function
+    of the length of the profile using on the neuroblastoma tumor micro array
+    benchmark.  Middle) Runtimes of pelt and fpop for the same
+    profiles.  Right) Runtimes of Binseg and fpop for the same
+    profiles.  }
 \end{figure}
 
 
@@ -159,7 +161,6 @@ Right) For Binseg and fpop and $n=10^7$
     \input{table-neuroblastoma-test-error}
   }
   \parbox{3in}{
-
     \input{figure-neuroblastoma-test-error}
   }
   \caption{Test error in neuroblastoma data set (percent incorrect labels,

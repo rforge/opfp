@@ -21,8 +21,8 @@ tit <-
 with.leg <-
   ggplot()+
   geom_hline(aes(yintercept=seconds), data=refs, color="grey")+
-  geom_text(aes(1, seconds, label=unit, vjust=vjust),
-            data=refs, size=4, color="grey")+
+  geom_text(aes(10000, seconds, label=unit, vjust=vjust),
+            data=refs, hjust=1, size=3.5, color="grey")+
   geom_point(aes(Ktrue, seconds, color=algorithm),
              data=timings, pch=1)+
   scale_color_manual(values=algo.colors)+
@@ -45,7 +45,7 @@ pos.method <-
       qp.labels("y","bottom","top",make.tiebreaker("x","y"),ylimits))
 
 dl <- direct.label(with.leg, pos.method)
-dl <- direct.label(with.leg)
+##dl <- direct.label(with.leg)
 
 pdf("figure-systemtime-simulation-small.pdf", h=3, w=3.5)
 print(dl)

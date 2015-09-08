@@ -11,7 +11,7 @@ refs <- data.frame(unit=c("1 second","1 minute"),
 small.refs <- refs[1,]
 abbrevs <- c(pelt.SIC="pelt", fpop.SIC="fpop",
              cghseg.52="pDPA", multiBinSeg.52="binseg",
-             wbs="wbs")
+             wbs="wbs", smuce="smuce")
 timings <- systemtime.arrays %>%
   filter(!grepl("dnacopy", algorithm)) %>%
   mutate(models=ifelse(algorithm %in%
@@ -25,7 +25,7 @@ tit <-
         "tumor chromosome segmentation problems (system.time)")
 algo.colors <-
   c(pDPA="#1B9E77", pelt="#D95F02", fpop="#7570B3", binseg="#E7298A",
-    "#66A61E", SNIP="#E6AB02", wbs="#A6761D", "#666666")
+    "#66A61E", SNIP="#E6AB02", wbs="#A6761D", smuce="#666666")
 
 wide <- dcast(timings, pid.chr ~ algorithm, value.var="seconds")
 faster.counts <- wide %>%

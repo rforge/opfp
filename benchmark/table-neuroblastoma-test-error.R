@@ -17,6 +17,8 @@ algos <-
     binseg="multiBinSeg",
     wbs="wbs.th.const",
     pelt.default="pelt.default",
+    smuce="smuce.alpha",
+    smuce.default="smuce.default",
     wbs.default="wbs.default")
 
 percent.mat <- arm.generalization.error[algos, "errors", ] * 100
@@ -48,7 +50,7 @@ left.labels <- percent.wide[!is.right, ]
 
 p <- ggplot()+
   xlab("percent incorrect labels")+
-  geom_text(aes(60, algorithm,
+  geom_text(aes(55, algorithm,
                 label=sprintf("$%.2f\\%% \\pm %.2f$", mean, sd)),
             data=percent.wide,
             hjust=1,

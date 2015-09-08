@@ -1,4 +1,5 @@
 works_with_R("3.2.2",
+             stepR="1.0.3",
              wbs="1.1",
              microbenchmark="1.4.2",
              SegAnnot="1.2",
@@ -16,34 +17,10 @@ if(!file.exists("signal.list.RData")){
 }
 load("signal.list.RData")
 
-run.wbs <- function(pro, th.const.vals){
-  require(wbs)
-  each.chrom(pro, function(chr){
-    Y <- chr$logratio
-    mean.mat <- matrix(NA, length(th.const.vals), length(Y))
-    if(nrow(chr) >= 2){
-      set.seed(1)
-      w <- wbs(Y)
-      list.or.na <- changepoints(w, th.const=th.const.vals)$cpt.th
-      if(is.list(list.or.na)){
-        for(param.i in seq_along(list.or.na)){
-          changes <- sort(list.or.na[[param.i]])
-          ends <- c(changes, length(Y))
-          starts <- c(1, changes+1)
-          for(seg.i in seq_along(starts)){
-            start <- starts[[seg.i]]
-            end <- ends[[seg.i]]
-            mean.mat[param.i, start:end] <- mean(Y[start:end])
-          }
-        }
-      }
-    }
-    mean.mat
-  })
-}
-
 seg.funs <-
-  list(wbs=function(one.chrom){
+  list(smuce=function(one.chrom){
+    smuceR(one.chrom$logratio)
+  },wbs=function(one.chrom){
     wbs(one.chrom$logratio)
   },cghseg.52=function(one.chrom){
     kmax <- min(52, nrow(one.chrom))
@@ -117,6 +94,8 @@ for(pid.chr.i in seq_along(signal.list)){
   pid.chr <- names(signal.list)[pid.chr.i]
   cat(sprintf("%4d / %4d %s\n", pid.chr.i, length(signal.list), pid.chr))
   one.chrom <- signal.list[[pid.chr]]
+  ggplot()+
+    geom_point(aes(position/1e9, logratio), data=one.chrom)
   m.args <- list(times=1)
   probes <- nrow(one.chrom)
   for(algorithm in names(seg.funs)){

@@ -4,7 +4,7 @@ load("systemtime.simulation.RData")
 
 algo.colors <-
   c(pDPA="#1B9E77", pelt="#D95F02", fpop="#7570B3", binseg="#E7298A",
-    "#66A61E", "#E6AB02",  wbs="#A6761D", "#666666")
+    "#66A61E", "#E6AB02",  wbs="#A6761D", smuce="#666666")
 
 refs <- data.frame(unit=c("1 second", "1 minute"),
                    seconds=c(1, 60),

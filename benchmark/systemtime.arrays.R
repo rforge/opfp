@@ -94,8 +94,8 @@ for(pid.chr.i in seq_along(signal.list)){
   pid.chr <- names(signal.list)[pid.chr.i]
   cat(sprintf("%4d / %4d %s\n", pid.chr.i, length(signal.list), pid.chr))
   one.chrom <- signal.list[[pid.chr]]
-  ggplot()+
-    geom_point(aes(position/1e9, logratio), data=one.chrom)
+  ## ggplot()+
+  ##   geom_point(aes(position/1e9, logratio), data=one.chrom)
   m.args <- list(times=1)
   probes <- nrow(one.chrom)
   for(algorithm in names(seg.funs)){

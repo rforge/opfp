@@ -49,9 +49,12 @@ right.labels <- percent.wide[is.right, ]
 left.labels <- percent.wide[!is.right, ]
 
 p <- ggplot()+
-  xlab("percent incorrect labels")+
-  geom_text(aes(55, algorithm,
-                label=sprintf("$%.2f\\%% \\pm %.2f$", mean, sd)),
+  theme_bw()+
+  scale_x_continuous("percent incorrect labels",
+                     limits=c(-90, max(percent.tall$percent)),
+                     breaks=seq(0, 80, by=20))+
+  geom_text(aes(-5, algorithm,
+                label=sprintf("$%.2f\\%% \\pm %05.2f$", mean, sd)),
             data=percent.wide,
             hjust=1,
             size=3)+

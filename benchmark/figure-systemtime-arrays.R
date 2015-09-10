@@ -1,4 +1,8 @@
-works_with_R("3.2.2", dplyr="0.4.2", directlabels="2014.6.13", ggplot2="1.0.1",
+works_with_R("3.2.2",
+             data.table="1.9.4",
+             dplyr="0.4.2",
+             directlabels="2015.6.17",
+             ggplot2="1.0.1",
              reshape2="1.2.2")
 
 load("systemtime.arrays.RData")
@@ -10,10 +14,11 @@ refs <- data.frame(unit=c("1 second","1 minute"),
                    seconds=c(1, 60))
 small.refs <- refs[1,]
 abbrevs <- c(pelt.SIC="pelt", fpop.SIC="fpop",
+             ##dnacopy.default="dnacopy.default",
              cghseg.52="pDPA", multiBinSeg.52="binseg",
              wbs="wbs", smuce="smuce")
 timings <- systemtime.arrays %>%
-  filter(!grepl("dnacopy", algorithm)) %>%
+  ##filter(!grepl("dnacopy", algorithm)) %>%
   mutate(models=ifelse(algorithm %in%
            c("fpop.SIC", "pelt.SIC", "dnacopy.default"),
            "one", "several"),
@@ -25,7 +30,8 @@ tit <-
         "tumor chromosome segmentation problems (system.time)")
 algo.colors <-
   c(pDPA="#1B9E77", pelt="#D95F02", fpop="#7570B3", binseg="#E7298A",
-    "#66A61E", SNIP="#E6AB02", wbs="#A6761D", smuce="#666666")
+    ##dnacopy.default="#66A61E",
+    SNIP="#E6AB02", wbs="#A6761D", smuce="#666666")
 
 wide <- dcast(timings, pid.chr ~ algorithm, value.var="seconds")
 faster.counts <- wide %>%

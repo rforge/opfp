@@ -31,8 +31,8 @@ algo.sizes <-
     binseg=1,
     ##dnacopy.default="#66A61E",
     ##SNIP="#E6AB02",
-    wbs=2, wbs.default=2,
-    smuce=2, smuce.default=2)
+    wbs=1, wbs.default=1,
+    smuce=1, smuce.default=1)
 
 algos <-
   c(pelt="pelt.n",
@@ -129,7 +129,7 @@ ggplot()+
                     values=c(default="black", "min error"="white"))+
   geom_path(aes(fpr.percent, tpr.percent,
                 color=algorithm, size=algorithm),
-                data=roc.curves)+
+              data=roc.curves)+
   geom_point(aes(fpr.percent, tpr.percent,
                  fill=param,
                  color=algorithm),

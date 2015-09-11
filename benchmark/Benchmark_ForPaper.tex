@@ -157,18 +157,21 @@ Right) For Binseg and fpop and $n=10^7$
 
 \begin{table}
   \centering
-  \parbox{3in}{
-    \input{table-neuroblastoma-test-error}
+  \parbox{3.5in}{
+    \includegraphics[width=\linewidth]{figure-neuroblastoma-roc}
   }
   \parbox{3in}{
     \input{figure-neuroblastoma-test-error}
   }
-  \caption{Test error in neuroblastoma data set (percent incorrect labels,
-    mean and standard deviation over 6 test folds). Note that pelt=pDPA=fpop 
-    since these three algorithms recover the exact same segmentation.
-    The ``default'' algorithms ignore the labels in the training set; 
-    other algorithms pick the best scalar penalty or threshold
-    using the training labels.}
+  \caption{Accuracy results on the neuroblastoma data set.
+    \textbf{Left:} 
+    Train error ROC curves and counts of incorrect labels
+    (FP: false positive, FN: false negative).
+    \textbf{Right:} 
+    test error (mean and standard deviation over 6 test folds). 
+    The ``default'' algorithms ignore the labels in the train set; 
+    other algorithms pick the parameter with minimum error with respect
+    to the labels in the train set.}
   \label{tab:neuroblastoma-test-error}
 \end{table}
 

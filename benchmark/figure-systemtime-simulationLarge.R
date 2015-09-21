@@ -2,18 +2,8 @@ works_with_R("3.1.1", dplyr="0.2", directlabels="2014.6.13", ggplot2="1.0")
 
 load("systemtime.simulationLarge.RData")
 
-algo.colors <-
-  c(pDPA="#1B9E77", pelt="#D95F02", fpop="#7570B3", binseg="#E7298A",
-    "#66A61E", "#E6AB02",  "#A6761D", "#666666")
-algo.colors <-
-  c(pDPA="#1B9E77",
-    PELT="#D95F02", PELT.default="#D95F02",
-    FPOP="#7570B3",
-    BinSeg="#E7298A",
-    ##dnacopy.default="#66A61E",
-    SNIP="#E6AB02",
-    WBS="#A6761D", WBS.default="#A6761D",
-    SMUCE="#666666", SMUCE.default="#666666")
+source("algo.colors.R")
+
 abbrevs <- c(pelt.SIC="PELT", fpop.SIC="FPOP",
              ##dnacopy.default="dnacopy.default",
              cghseg.52="pDPA", multiBinSeg.52="BinSeg",

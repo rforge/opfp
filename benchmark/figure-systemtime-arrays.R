@@ -28,19 +28,8 @@ tit <-
   paste(length(counts), "algorithms on",
         counts[1],
         "tumor chromosome segmentation problems (system.time)")
-algo.colors <-
-  c(pDPA="#1B9E77", pelt="#D95F02", fpop="#7570B3", binseg="#E7298A",
-    ##dnacopy.default="#66A61E",
-    SNIP="#E6AB02", wbs="#A6761D", smuce="#666666")
-algo.colors <-
-  c(pDPA="#1B9E77",
-    PELT="#D95F02", PELT.default="#D95F02",
-    FPOP="#7570B3",
-    BinSeg="#E7298A",
-    ##dnacopy.default="#66A61E",
-    SNIP="#E6AB02",
-    WBS="#A6761D", WBS.default="#A6761D",
-    SMUCE="#666666", SMUCE.default="#666666")
+
+source("algo.colors.R")
 
 wide <- dcast(timings, pid.chr ~ algorithm, value.var="seconds")
 faster.counts <- wide %>%

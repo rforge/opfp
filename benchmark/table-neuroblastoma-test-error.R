@@ -14,21 +14,13 @@ if(!file.exists("all.stats.RData")){
 }
 load("all.stats.RData")
 
-algo.colors <-
-  c(pDPA="#1B9E77",
-    PELT="#D95F02", PELT.default="#D95F02",
-    FPOP="#7570B3",
-    BinSeg="#E7298A",
-    ##dnacopy.default="#66A61E",
-    SNIP="#E6AB02",
-    WBS="#A6761D", WBS.default="#A6761D",
-    SMUCE="#666666", SMUCE.default="#666666")
+source("algo.colors.R")
 
 algos <-
-  c(PELT="pelt.n",
+  c(BinSeg="multiBinSeg",
+    PELT="pelt.n",
     pDPA="cghseg.k",
     FPOP="fpop",
-    BinSeg="multiBinSeg",
     PELT.default="pelt.default",
     SMUCE="smuce.penalized",
     SMUCE.default="smuce.default",
@@ -82,14 +74,14 @@ for(algorithm in dot.algos){
                tpr.percent,
                total.labels,
                row.names=NULL)
-  if(!algorithm %in% c("BinSeg", "pDPA", "FPOP")){
+  if(!algorithm %in% c("BinSeg", "pDPA", "PELT")){
     roc.by.algo[[algorithm]] <- algo.df
   }
   min.param <- algo.df[which.min(errors), ]
   if(algorithm %in% c("WBS", "SMUCE")){
     min.err.by.algo[[algorithm]] <- min.param
   }
-  if(algorithm == "PELT"){
+  if(algorithm == "FPOP"){
     MLseg <- min.param
   }
 }
@@ -173,7 +165,7 @@ left.labels <- percent.wide[!is.right, ]
 p <- ggplot()+
   theme_bw()+
   guides(color="none")+
-  scale_x_continuous("percent incorrect labels",
+  scale_x_continuous("test error, percent incorrect labels",
                      limits=c(-5, max(percent.tall$percent)),
                      breaks=seq(0, 20, by=5))+
   geom_text(aes(0, algorithm,
@@ -197,12 +189,14 @@ p <- ggplot()+
              data=percent.tall)+
   scale_color_manual(values=algo.colors)
 
-tikz("figure-neuroblastoma-test-error.tex", w=3, h=2)
+tikz("figure-neuroblastoma-test-error.tex", w=3.2, h=1.8)
 print(p)
 dev.off()
 
-t.test(percent.mat["PELT", ], percent.mat["SMUCE", ])
-t.test(percent.mat["PELT", ], percent.mat["WBS", ])
+t.test(percent.mat["FPOP", ], percent.mat["SMUCE", ],
+       alternative="less", paired=TRUE)
+t.test(percent.mat["FPOP", ], percent.mat["WBS", ],
+       alternative="less", paired=TRUE)
 
 xt <- xtable(percent.df[nrow(percent.df):1, ], digits=2)
 print(xt, file="table-neuroblastoma-test-error.tex", floating=FALSE)

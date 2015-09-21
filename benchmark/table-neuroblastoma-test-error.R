@@ -10,40 +10,30 @@ if(!file.exists("arm.generalization.error.RData")){
 load("arm.generalization.error.RData")
 
 if(!file.exists("all.stats.RData")){
-  download.file("http://cbio.ensmp.fr/~thocking/neuroblastoma/zzz.stats.RData", "all.stats.RData")
+  download.file("http://cbio.ensmp.fr/~thocking/neuroblastoma/all.stats.RData", "all.stats.RData")
 }
 load("all.stats.RData")
 
 algo.colors <-
   c(pDPA="#1B9E77",
-    pelt="#D95F02", pelt.default="#D95F02",
-    fpop="#7570B3",
-    binseg="#E7298A",
+    PELT="#D95F02", PELT.default="#D95F02",
+    FPOP="#7570B3",
+    BinSeg="#E7298A",
     ##dnacopy.default="#66A61E",
     SNIP="#E6AB02",
-    wbs="#A6761D", wbs.default="#A6761D",
-    smuce="#666666", smuce.default="#666666")
-
-algo.sizes <-
-  c(pDPA=1,
-    pelt=1, pelt.default=1,
-    fpop=1,
-    binseg=1,
-    ##dnacopy.default="#66A61E",
-    ##SNIP="#E6AB02",
-    wbs=1, wbs.default=1,
-    smuce=1, smuce.default=1)
+    WBS="#A6761D", WBS.default="#A6761D",
+    SMUCE="#666666", SMUCE.default="#666666")
 
 algos <-
-  c(pelt="pelt.n",
+  c(PELT="pelt.n",
     pDPA="cghseg.k",
-    fpop="fpop",
-    binseg="multiBinSeg",
-    wbs="wbs.th.const",
-    pelt.default="pelt.default",
-    smuce="smuce.alpha",
-    smuce.default="smuce.default",
-    wbs.default="wbs.default")
+    FPOP="fpop",
+    BinSeg="multiBinSeg",
+    PELT.default="pelt.default",
+    SMUCE="smuce.penalized",
+    SMUCE.default="smuce.default",
+    WBS.default="wbs.default",
+    WBS="wbs.penalized")
 
 percent.mat <- arm.generalization.error[algos, "errors", ] * 100
 rownames(percent.mat) <- names(algos)
@@ -52,17 +42,17 @@ percent.df <-
   data.frame(mean=rowMeans(percent.mat),
              sd=apply(percent.mat, 1, sd))
 
+dot.algos <- grep("default", rownames(percent.df), value=TRUE,invert=TRUE)
 percent.wide <-
-  data.frame(percent.df,
-             algorithm=factor(rownames(percent.df), rownames(percent.df)),
-             min=apply(percent.mat, 1, min),
-             max=apply(percent.mat, 1, max))
-
-dot.algos <- rownames(percent.df)[percent.df$mean < 10]
-dot.algos <- rownames(percent.df)
+  data.frame(percent.df[dot.algos, ],
+             algorithm=factor(dot.algos, dot.algos),
+             min=apply(percent.mat[dot.algos, ], 1, min),
+             max=apply(percent.mat[dot.algos, ], 1, max))
 percent.by.algo <- list()
 roc.by.algo <- list()
 min.err.by.algo <- list()
+breakpoint.tab.list <- list()
+normal.tab.list <- list()
 for(algorithm in dot.algos){
   percent.by.algo[[algorithm]] <-
     data.frame(algorithm=factor(algorithm, rownames(percent.df)),
@@ -74,7 +64,11 @@ for(algorithm in dot.algos){
   errors <- fp + fn
   fp.possible <- sum(algo.stats$normal.anns)
   fn.possible <- sum(algo.stats$breakpoint.anns)
-  print(fp.possible + fn.possible)
+  breakpoint.tab.list[[algorithm]] <-
+    table(algo.stats$breakpoint.anns, useNA="always")
+  normal.tab.list[[algorithm]] <-
+    table(algo.stats$normal.anns, useNA="always")
+  total.labels <- fp.possible + fn.possible
   fpr.percent <- fp/fp.possible * 100
   fnr <- fn/fn.possible
   tpr.percent <- (1-fnr) * 100
@@ -86,52 +80,67 @@ for(algorithm in dot.algos){
                fn,
                fpr.percent,
                tpr.percent,
+               total.labels,
                row.names=NULL)
-  if(!algorithm %in% c("binseg", "pDPA", "fpop")){
+  if(!algorithm %in% c("BinSeg", "pDPA", "FPOP")){
     roc.by.algo[[algorithm]] <- algo.df
   }
   min.param <- algo.df[which.min(errors), ]
-  if(algorithm %in% c("wbs", "smuce")){
+  if(algorithm %in% c("WBS", "SMUCE")){
     min.err.by.algo[[algorithm]] <- min.param
   }
-  if(algorithm == "pelt"){
+  if(algorithm == "PELT"){
     MLseg <- min.param
   }
 }
+(breakpoint.tab <- do.call(rbind, breakpoint.tab.list))
+(normal.tab <- do.call(rbind, normal.tab.list))
+
+with(all.stats, wbs.th.const$normal.anns - wbs.default$normal.anns)
+head(all.stats$wbs.th.const$normal.anns)
+head(all.stats$wbs.default$normal.anns)
+with(all.stats, {
+  rbind(wbs.th.const.normal=wbs.th.const$normal.anns["6",],
+        wbs.default.normal=wbs.default$normal.anns["6",],
+        wbs.th.const.breakpoint=wbs.th.const$breakpoint.anns["6",],
+        wbs.default.breakpoint=wbs.default$breakpoint.anns["6",])
+})
+
 min.err <- do.call(rbind, min.err.by.algo)
 all.roc <- do.call(rbind, roc.by.algo)
+with(all.roc, stopifnot(total.labels[1] == total.labels))
 roc.curves <- subset(all.roc, !grepl("default", algorithm))
-default.dots <- subset(all.roc, grepl("default", algorithm))
+##default.dots <- subset(all.roc, grepl("default", algorithm))
 roc.labels <-
-  rbind(data.frame(default.dots, param="default"),
+  rbind(##data.frame(default.dots, param="default"),
         data.frame(min.err, param="min error"))
 roc.dots <-
   rbind(roc.labels,
         data.frame(MLseg, param="min error"))
 percent.tall <- do.call(rbind, percent.by.algo)
 rownames(roc.labels) <- roc.labels$algorithm
-roc.labels["wbs", c("fpr.percent", "tpr.percent")] <- c(5, 88)
-roc.labels["pelt.default", c("fpr.percent")] <- 5
-roc.labels["smuce", c("tpr.percent")] <- 95
-roc.labels["smuce.default", c("fpr.percent", "tpr.percent")] <- c(73, 95)
-roc.labels["wbs.default", c("fpr.percent", "tpr.percent")] <- c(90, 95)
+roc.labels["WBS", c("fpr.percent", "tpr.percent")] <- c(3, 88)
+##roc.labels["PELT.default", c("fpr.percent")] <- 5
+roc.labels["SMUCE", c("fpr.percent")] <- -6
+##roc.labels["SMUCE.default", c("fpr.percent", "tpr.percent")] <- c(73, 95)
+##roc.labels["WBS.default", c("fpr.percent", "tpr.percent")] <- c(90, 95)
 
 tsize <- 3
 ggroc <- 
 ggplot()+
-  scale_x_continuous("False positive rate (percent)", limits=c(-15, 100))+
+  scale_x_continuous("False positive rate (percent)",
+                     breaks=seq(0, 100, by=5))+
   scale_y_continuous("True positive rate (percent)",
-                     breaks=seq(0, 100, by=25),
-                     limits=c(0, 110))+
+                     breaks=seq(0, 100, by=5))+
+  coord_equal(ylim=c(75, 102), xlim=c(-7, 25))+
   scale_color_manual(values=algo.colors)+
-  scale_size_manual(values=algo.sizes)+
   scale_fill_manual("parameter",
                     values=c(default="black", "min error"="white"))+
   geom_path(aes(fpr.percent, tpr.percent,
-                color=algorithm, size=algorithm),
+                color=algorithm),
               data=roc.curves)+
   geom_point(aes(fpr.percent, tpr.percent,
-                 fill=param,
+                 ##fill=param,
                  color=algorithm),
              data=roc.dots,
              pch=21, size=5)+
@@ -143,7 +152,7 @@ ggplot()+
             vjust=1,
             size=tsize)+
   guides(color="none", size="none")+
-  geom_text(aes(-15, 110, label=sprintf("fpop=pelt=pDPA=binseg\nFP=%d\nFN=%d",
+  geom_text(aes(-5, 100, label=sprintf("fpop=pelt=pDPA=binseg\nFP=%d\nFN=%d",
                            fp, fn),
                 color=algorithm),
             size=tsize,
@@ -165,9 +174,9 @@ p <- ggplot()+
   theme_bw()+
   guides(color="none")+
   scale_x_continuous("percent incorrect labels",
-                     limits=c(-90, max(percent.tall$percent)),
-                     breaks=seq(0, 80, by=20))+
-  geom_text(aes(-5, algorithm,
+                     limits=c(-5, max(percent.tall$percent)),
+                     breaks=seq(0, 20, by=5))+
+  geom_text(aes(0, algorithm,
                 color=algorithm,
                 label=sprintf("$%.2f\\%% \\pm %05.2f$", mean, sd)),
             data=percent.wide,
@@ -191,6 +200,9 @@ p <- ggplot()+
 tikz("figure-neuroblastoma-test-error.tex", w=3, h=2)
 print(p)
 dev.off()
+
+t.test(percent.mat["PELT", ], percent.mat["SMUCE", ])
+t.test(percent.mat["PELT", ], percent.mat["WBS", ])
 
 xt <- xtable(percent.df[nrow(percent.df):1, ], digits=2)
 print(xt, file="table-neuroblastoma-test-error.tex", floating=FALSE)

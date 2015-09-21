@@ -13,10 +13,10 @@ require(directlabels)
 refs <- data.frame(unit=c("1 second","1 minute"),
                    seconds=c(1, 60))
 small.refs <- refs[1,]
-abbrevs <- c(pelt.SIC="pelt", fpop.SIC="fpop",
+abbrevs <- c(pelt.SIC="PELT", fpop.SIC="FPOP",
              ##dnacopy.default="dnacopy.default",
-             cghseg.52="pDPA", multiBinSeg.52="binseg",
-             wbs="wbs", smuce="smuce")
+             cghseg.52="pDPA", multiBinSeg.52="BinSeg",
+             wbs="WBS", smuce="SMUCE")
 timings <- systemtime.arrays %>%
   ##filter(!grepl("dnacopy", algorithm)) %>%
   mutate(models=ifelse(algorithm %in%
@@ -32,6 +32,15 @@ algo.colors <-
   c(pDPA="#1B9E77", pelt="#D95F02", fpop="#7570B3", binseg="#E7298A",
     ##dnacopy.default="#66A61E",
     SNIP="#E6AB02", wbs="#A6761D", smuce="#666666")
+algo.colors <-
+  c(pDPA="#1B9E77",
+    PELT="#D95F02", PELT.default="#D95F02",
+    FPOP="#7570B3",
+    BinSeg="#E7298A",
+    ##dnacopy.default="#66A61E",
+    SNIP="#E6AB02",
+    WBS="#A6761D", WBS.default="#A6761D",
+    SMUCE="#666666", SMUCE.default="#666666")
 
 wide <- dcast(timings, pid.chr ~ algorithm, value.var="seconds")
 faster.counts <- wide %>%
@@ -107,8 +116,8 @@ inaccurate <-
 inacc.rects <-
   data.frame(xmin=0, ymin=0, xmax=0.01, ymax=0.01)
 both.refs <-
-  rbind(data.frame(refs, competitor="pelt"),
-        data.frame(small.refs, competitor="binseg"))
+  rbind(data.frame(refs, competitor="PELT"),
+        data.frame(small.refs, competitor="BinSeg"))
 binseg.inacc <- wide %>%
   filter(fpop.SIC < 0.01,
          multiBinSeg.52 < 0.01)
@@ -129,10 +138,10 @@ scatter <-
   geom_text(aes(1e-2, seconds, label=unit),
             data=small.refs, vjust=1.5, hjust=0, color=ref.color, size=4)+
   geom_point(aes(pelt.SIC, fpop.SIC),
-             data=data.frame(wide, competitor="pelt"),
+             data=data.frame(wide, competitor="PELT"),
              pch=1)+
   geom_point(aes(multiBinSeg.52, fpop.SIC),
-             data=data.frame(wide, competitor="binseg"),
+             data=data.frame(wide, competitor="BinSeg"),
              pch=1)+
   facet_grid(. ~ competitor, labeller=function(var, val){
     paste0("competitor: ", val)
@@ -217,7 +226,7 @@ with.leg <-
   scale_color_manual(values=algo.colors)+
   theme_bw()+
   scale_x_log10("number of data points to segment",
-                limits=10^c(1.3, 5.9),
+                limits=10^c(1.3, 6.1),
                 minor_breaks=NULL,
                 breaks=c(10^seq(2, 4, by=1), range(timings$probes)))+
   scale_y_log10("seconds",

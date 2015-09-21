@@ -5,6 +5,19 @@ load("systemtime.simulation.RData")
 algo.colors <-
   c(pDPA="#1B9E77", pelt="#D95F02", fpop="#7570B3", binseg="#E7298A",
     "#66A61E", "#E6AB02",  wbs="#A6761D", smuce="#666666")
+algo.colors <-
+  c(pDPA="#1B9E77",
+    PELT="#D95F02", PELT.default="#D95F02",
+    FPOP="#7570B3",
+    BinSeg="#E7298A",
+    ##dnacopy.default="#66A61E",
+    SNIP="#E6AB02",
+    WBS="#A6761D", WBS.default="#A6761D",
+    SMUCE="#666666", SMUCE.default="#666666")
+abbrevs <- c(pelt.SIC="PELT", fpop.SIC="FPOP",
+             ##dnacopy.default="dnacopy.default",
+             cghseg.52="pDPA", multiBinSeg.52="BinSeg",
+             wbs="WBS", smuce="SMUCE")
 
 refs <- data.frame(unit=c("1 second", "1 minute"),
                    seconds=c(1, 60),
@@ -12,7 +25,8 @@ refs <- data.frame(unit=c("1 second", "1 minute"),
 timings <- systemtime.simulation %>%
   mutate(models=ifelse(algorithm %in%
            c("fpop", "pelt"),
-           "one", "several"))
+           "one", "several"),
+         algorithm=abbrevs[algorithm])
 counts <- table(timings$algorithm)
 tit <-
   paste(length(counts), "algorithms on",

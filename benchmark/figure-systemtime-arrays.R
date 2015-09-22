@@ -209,6 +209,98 @@ with.leg <-
             data=refs, vjust=1.5, hjust=0,
             size=4,
             color="grey")+
+  geom_smooth(aes(probes, seconds, color=abbrev, group=abbrev),
+              data=subset(timings, !is.na(abbrev)),
+              pch=1)+
+  scale_shape_manual(values=c(one=1, several=19))+
+  scale_color_manual(values=algo.colors)+
+  theme_bw()+
+  scale_x_log10("number of data points to segment",
+                limits=10^c(1.3, 6.1),
+                minor_breaks=NULL,
+                breaks=c(10^seq(2, 4, by=1), range(timings$probes)))+
+  scale_y_log10("seconds",
+                ##labels=function(x)sprintf("%.2f", x),
+                minor_breaks=NULL,
+                breaks=10^seq(-4, 4, by=1))
+pos.method <-
+  list("last.points",
+       "calc.boxes",
+       dl.trans(h=h*3/2, x=x+0.1),
+       "calc.borders",
+       ##"draw.rects",
+       qp.labels("y","bottom","top",make.tiebreaker("x","y"),ylimits))
+dl <- direct.label(with.leg, pos.method)
+print(dl)
+
+## Compute a mean +/- SD myself.
+n.bins <- 25
+bin.edges <- 10^seq(log10(25), log10(153662), l=n.bins)
+## There is a non-linearity in SMUCE between 870 and 1006 probes.
+is.between <- 870 < bin.edges & bin.edges < 1006
+print(n.bins)
+stopifnot(any(is.between))
+bins <-
+  data.table(left=bin.edges[-n.bins],
+             right=bin.edges[-1])
+bins[, mid := 10^((log10(left)+log10(right))/2)]
+setkey(bins, left, right)
+timings.dt <- data.table(timings)[!is.na(abbrev) & 50 < probes,]
+timings.dt[, probes1 := probes]
+setkey(timings.dt, probes, probes1)
+ov <- foverlaps(timings.dt, bins)
+stopifnot(nrow(ov) == nrow(timings.dt))
+bin.stats <- ov[, {
+  q <- quantile(seconds)
+  list(quantile25=q[["25%"]],
+       median=q[["50%"]],
+       quantile75=q[["75%"]])
+}, by=list(abbrev, mid)]
+
+with.leg <-
+  ggplot()+
+  geom_hline(aes(yintercept=seconds), data=refs, color="grey")+
+  geom_text(aes(25, seconds, label=unit),
+            data=refs, vjust=1.5, hjust=0,
+            size=4,
+            color="grey")+
+  geom_ribbon(aes(mid, ymin=quantile25, ymax=quantile75, fill=abbrev),
+              alpha=0.5,
+              data=bin.stats)+
+  geom_line(aes(mid, median, color=abbrev),
+             data=bin.stats)+
+  scale_color_manual(values=algo.colors)+
+  scale_fill_manual(values=algo.colors)+
+  theme_bw()+
+  scale_x_log10("number of data points to segment",
+                limits=10^c(0.3, 6.3),
+                minor_breaks=NULL,
+                breaks=c(10^seq(2, 4, by=1), range(timings$probes)))+
+  scale_y_log10("seconds",
+                ##labels=function(x)sprintf("%.2f", x),
+                minor_breaks=NULL,
+                breaks=10^seq(-4, 4, by=1))
+pos.method <-
+  list("last.points",
+       "calc.boxes",
+       dl.trans(h=h*3/2, x=x+0.1),
+       "calc.borders",
+       ##"draw.rects",
+       qp.labels("y","bottom","top",make.tiebreaker("x","y"),ylimits))
+dl <- direct.label(with.leg, dl.combine("first.polygons", "last.polygons"))
+print(dl)
+
+pdf("figure-systemtime-arrays-bins.pdf", w=4, h=3)
+print(dl)
+dev.off()#;system("evince figure-systemtime-arrays-small.pdf")
+
+with.leg <-
+  ggplot()+
+  geom_hline(aes(yintercept=seconds), data=refs, color="grey")+
+  geom_text(aes(25, seconds, label=unit),
+            data=refs, vjust=1.5, hjust=0,
+            size=4,
+            color="grey")+
   geom_point(aes(probes, seconds, color=abbrev),
              data=timings, pch=1)+
   scale_shape_manual(values=c(one=1, several=19))+

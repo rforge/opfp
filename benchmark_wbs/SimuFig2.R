@@ -51,7 +51,7 @@ for(i in NbBkp){
 
 }
 save(perfT, file="Res_PerfSpeedSpeed.RData")
-
+pour le xls.
 
 perfSummary <- list()
 for(i in NbBkp){

@@ -39,7 +39,7 @@ Simu[[isimu]]$bkpPage29 <-c(0, c(11, 21, 41, 61, 91, 121, 161, 201, 251, 301, 36
 Simu[[isimu]]$Lg <- diff(Simu[[isimu]]$bkpPage29)
 Simu[[isimu]]$mu <- c(7, -7, 6, -6, 5, -5, 4, -4, 3, -3, 2, -2, 1, -1)
 Simu[[isimu]]$sigma=4; 
-Simu[[isimu]]$signal <- rep(Simu[[1]]$mu, Simu[[1]]$Lg); 
+Simu[[isimu]]$signal <- rep(Simu[[isimu]]$mu, Simu[[isimu]]$Lg); 
 Simu[[isimu]]$Ktrue <- sum(diff(Simu[[isimu]]$signal)!=0)+1
 
 

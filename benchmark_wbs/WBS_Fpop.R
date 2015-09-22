@@ -24,9 +24,9 @@ for(jj in 1:nbrep){
   signals[[jj]] <- signaltrue + rnorm(length(signaltrue), sd=sigmatrue)
 }
 
-  fpopRes <- mclapply(signals, FUN=assess_K_and_MSE, approach="Fpop.2", signaltrue, bkptrue, Ktrue, sigmatrue, mc.cores=4)
-  wbsRes <- mclapply(signals, FUN=assess_K_and_MSE, approach="WBS.ssic", signaltrue, bkptrue, Ktrue, sigmatrue, mc.cores=4)
-  smuceRes <- mclapply(signals, FUN=assess_K_and_MSE, approach="Smuce.0.45", signaltrue, bkptrue, Ktrue, sigmatrue, mc.cores=4)
+  fpopRes <- mclapply(signals, FUN=assess_K_and_MSE, approach="Fpop.2", signaltrue, bkptrue, Ktrue, sigmatrue, mc.cores=3)
+  wbsRes <- mclapply(signals, FUN=assess_K_and_MSE, approach="WBS.ssic", signaltrue, bkptrue, Ktrue, sigmatrue, mc.cores=3)
+  smuceRes <- mclapply(signals, FUN=assess_K_and_MSE, approach="Smuce.0.45", signaltrue, bkptrue, Ktrue, sigmatrue, mc.cores=3)
 
 
 resFpop <- do.call("rbind", fpopRes)

@@ -23,6 +23,8 @@
 #include <float.h>
 #include <stdlib.h>
 
+using namespace std;
+
 class Polynome2 {
  private:
      double a2, a1, a0;
@@ -164,10 +166,12 @@ double Polynome2::eval(double X)
 }
 void Polynome2::minOrMax(double *minOrMax, double *tmp, int *origine_)
 {
+	
 	if(this->getStatus() != 0)
 	{
-
+		
 		*tmp = -0.25 * a1*a1 / (a2) + (a0) ;
+		//cout << "Min : " << *tmp << ", " << this->getOrigine() <<"\n";
 		if((*tmp) < (*minOrMax) )
 		{
 			(*minOrMax) = (*tmp);
@@ -216,13 +220,13 @@ void Polynome2::roots(double a0_)
 		double delta = this->delta(a0_);
 		if(delta == 0)
 		{
-			this->setRacine1( -(a1)/(2*(a2)));
-			this->setRacine2(0.);//*A
+			this->setRacine1( -(a1)/(2*(a2)) );
+			this->setRacine2( -(a1)/(2*(a2)) + 1.);//*A
 		}
 		if(delta < 0)
 		{
 			this->setRacine1(0.);//*A
-			this->setRacine2(0.);//*A
+			this->setRacine2(1.);//*A
 		}
 		if(delta > 0)
 		{
@@ -232,6 +236,7 @@ void Polynome2::roots(double a0_)
 		}
 		this->setStatus(1);
 	}
+	
 }
 void Polynome2::add(double a2_, double a1_, double a0_)
 {

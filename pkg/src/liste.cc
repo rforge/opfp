@@ -38,7 +38,7 @@ void Liste::showAllNext()
 void Liste::resetMaillonBorders(Polynome2 *poly_)
 {
 	//if(this->getPolynome()->getRacine2() == NAN)
-	if(this->getPolynome()->getRacine2() == 0.)
+	if(this->getPolynome()->getRacine2() > this->getPolynome()->getRacine1())
 	//if( isnan(this->getPolynome()->getRacine2()) )
 	{
 		this->setPolynome(poly_);

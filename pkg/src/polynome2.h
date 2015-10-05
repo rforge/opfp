@@ -23,7 +23,7 @@
 #include <float.h>
 #include <stdlib.h>
 
-using namespace std;
+//using namespace std;
 
 class Polynome2 {
  private:

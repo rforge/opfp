@@ -3,7 +3,9 @@ Benchmark_ForPaper.pdf: Benchmark_ForPaper.tex refs.bib figure-systemtime-simula
 	bibtex Benchmark_ForPaper
 	pdflatex Benchmark_ForPaper
 	pdflatex Benchmark_ForPaper
-table-neuroblastoma-test-error.tex: table-neuroblastoma-test-error.R algo.colors.R all.stats.RData
+table-neuroblastoma-test-error.tex: table-neuroblastoma-test-error.R algo.colors.R arm.generalization.error.RData
+	R --no-save < $<
+arm.generalization.error.RData: arm.generalization.error.R all.stats.RData
 	R --no-save < $<
 all.stats.RData: all.stats.R 
 	R --no-save < $<

@@ -1,7 +1,4 @@
-works_with_R("3.2.2",
-             reshape2="1.4.1",
-             plyr="1.8.3",
-             ggplot2="2.0.0")
+source("packages.R")
 
 source("pick.best.index.R")
 
@@ -135,8 +132,6 @@ getmat <- function(df){
   as.matrix(m)
 }
 
-
-
 results <- lapply(all.stats,estimate.test.error)
 ## compare local, hybrid, and global error rates
 print(sapply(results,function(stat)sapply(stat,function(x)mean(x[1,]))))
@@ -195,7 +190,7 @@ train.err.curves <- ggplot(global.train,aes(param.id,value))+
                         ))+
   scale_linetype_manual(values=c(error=1,false.positive=2,false.negative=3))+
   theme_bw()+ # bioinformatics
-  opts(panel.margin=grid::unit(0,"lines"))+
+  theme(panel.margin=grid::unit(0,"lines"))+
   ylab("percent incorrectly predicted annotations in training set")
 algos <- unique(global.train$algo)
 n.algos <- length(algos)
@@ -207,7 +202,8 @@ dev.off()
 png("figure-profile-size-time.png",height=400,width=300*n.algos)
 data(neuroblastoma,package="neuroblastoma")
 profile.list <- split(neuroblastoma$profiles,neuroblastoma$profiles$profile.id)
-probes <- sapply(profile.list,nrow)
+all.cids <- names(all.stats[[1]]$seconds)
+probes <- sapply(profile.list[all.cids], nrow)
 seconds <- do.call(rbind,lapply(names(all.stats),function(model){
     L <- all.stats[[model]]
       data.frame(seconds=L$seconds,model,probes)
@@ -228,10 +224,10 @@ p <- ggplot()+
   geom_point(aes(probes,seconds),data=seconds,pch=1)+
   geom_hline(aes(yintercept=seconds),data=median.df)+
   facet_grid(.~model)+
-  opts(title="Algorithms show varying speed and complexity",
-       panel.margin=grid::unit(1,"lines"))+
+  ggtitle("Algorithms show varying speed and complexity")+
+  theme(panel.margin=grid::unit(1,"lines"))+
   scale_x_log10("Number of probes on the profile",
-                breaks=good.breaks,minor_breaks=NA)+
+                breaks=good.breaks,minor_breaks=NULL)+
   scale_y_log10("Seconds to process the profile")
 
 print(p)

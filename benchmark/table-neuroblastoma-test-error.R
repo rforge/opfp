@@ -1,9 +1,9 @@
-works_with_R("3.2.2", xtable="1.7.4", ggplot2="1.0.1",
-             tikzDevice="0.7.0")
+source("packages.R")
 
-options(tikzDocumentDeclaration="\\documentclass{article}\\usepackage{amssymb,amsmath}",
-        tikzMetricsDictionary="tikzMetrics")
-
+## If you execute this script by itself, it will download the results
+## computed on the CBIO cluster. Otherwise, these results can be
+## computed locally by typing "make arm.generalization.error.RData" in
+## the shell.
 if(!file.exists("arm.generalization.error.RData")){
   download.file("http://cbio.ensmp.fr/~thocking/neuroblastoma/arm.generalization.error.RData", "arm.generalization.error.RData")
 }
@@ -21,10 +21,10 @@ algos <-
     PELT="pelt.n",
     pDPA="cghseg.k",
     FPOP="fpop",
-    PELT.default="pelt.default",
+    ##PELT.default="pelt.default",
+    ##SMUCE.default="smuce.default",
+    ##WBS.default="wbs.default",
     SMUCE="smuce.penalized",
-    SMUCE.default="smuce.default",
-    WBS.default="wbs.default",
     WBS="wbs.penalized")
 
 percent.mat <- arm.generalization.error[algos, "errors", ] * 100
@@ -88,15 +88,15 @@ for(algorithm in dot.algos){
 (breakpoint.tab <- do.call(rbind, breakpoint.tab.list))
 (normal.tab <- do.call(rbind, normal.tab.list))
 
-with(all.stats, wbs.th.const$normal.anns - wbs.default$normal.anns)
-head(all.stats$wbs.th.const$normal.anns)
-head(all.stats$wbs.default$normal.anns)
-with(all.stats, {
-  rbind(wbs.th.const.normal=wbs.th.const$normal.anns["6",],
-        wbs.default.normal=wbs.default$normal.anns["6",],
-        wbs.th.const.breakpoint=wbs.th.const$breakpoint.anns["6",],
-        wbs.default.breakpoint=wbs.default$breakpoint.anns["6",])
-})
+## with(all.stats, wbs.th.const$normal.anns - wbs.default$normal.anns)
+## head(all.stats$wbs.th.const$normal.anns)
+## head(all.stats$wbs.default$normal.anns)
+## with(all.stats, {
+##   rbind(wbs.th.const.normal=wbs.th.const$normal.anns["6",],
+##         wbs.default.normal=wbs.default$normal.anns["6",],
+##         wbs.th.const.breakpoint=wbs.th.const$breakpoint.anns["6",],
+##         wbs.default.breakpoint=wbs.default$breakpoint.anns["6",])
+## })
 
 min.err <- do.call(rbind, min.err.by.algo)
 all.roc <- do.call(rbind, roc.by.algo)

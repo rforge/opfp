@@ -429,40 +429,44 @@ l2vals=c(1e-5,1e-4,1e-3,5e-3,1e-2,2e-2,5e-2,
     library(wbs)
     each.chrom(pro, function(chr){
       Y <- chr$logratio
-      w <- wbs(Y)
-      max.segments <- 20
-      max.changes <- max.segments-1
-      seg.mean.mat <- matrix(NA, max.segments, length(Y))
-      seg.mean.mat[1, ] <- mean(Y)
-      for(n.changes in 2:max.changes){
-        n.segments <- n.changes + 1
-        fit <- wbs:::changepoints.sbs(w, Kmax=n.changes)
-        ## Confusingly, the changepoints are output in the following
-        ## formats:
-        break.vec <- if(is.list(fit$cpt.th)){#more than 1 change:
-          ## $cpt.th[[1]]
-          ## [1] 3 1 2 4
-          sort(fit$cpt.th[[1]])
-        }else if(is.na(fit$cpt.th)){#no changes:
-          ## $cpt.th
-          ## [1] NA
-          integer()
-        }else{#one change.
-          ## $cpt.th
-          ## [1] 2
-          fit$cpt.th
+      if(length(Y) < 4){
+        matrix(mean(Y), length(lambda.vec), length(Y))
+      }else{
+        w <- wbs(Y)
+        max.segments <- 20
+        max.changes <- max.segments-1
+        seg.mean.mat <- matrix(NA, max.segments, length(Y))
+        seg.mean.mat[1, ] <- mean(Y)
+        for(n.changes in 2:max.changes){
+          n.segments <- n.changes + 1
+          fit <- wbs:::changepoints.sbs(w, Kmax=n.changes)
+          ## Confusingly, the changepoints are output in the following
+          ## formats:
+          break.vec <- if(is.list(fit$cpt.th)){#more than 1 change:
+            ## $cpt.th[[1]]
+            ## [1] 3 1 2 4
+            sort(fit$cpt.th[[1]])
+          }else if(is.na(fit$cpt.th)){#no changes:
+            ## $cpt.th
+            ## [1] NA
+            integer()
+          }else{#one change.
+            ## $cpt.th
+            ## [1] 2
+            fit$cpt.th
+          }
+          end.vec <- c(break.vec, length(Y))
+          start.vec <- c(1, break.vec+1)
+          for(segment.i in seq_along(start.vec)){
+            start <- start.vec[[segment.i]]
+            end <- end.vec[[segment.i]]
+            seg.data <- Y[start:end]
+            seg.mean <- mean(seg.data)
+            seg.mean.mat[n.segments, start:end] <- seg.mean
+          }
         }
-        end.vec <- c(break.vec, length(Y))
-        start.vec <- c(1, break.vec+1)
-        for(segment.i in seq_along(start.vec)){
-          start <- start.vec[[segment.i]]
-          end <- end.vec[[segment.i]]
-          seg.data <- Y[start:end]
-          seg.mean <- mean(seg.data)
-          seg.mean.mat[n.segments, start:end] <- seg.mean
-        }
+        penalized.mean.mat(Y, seg.mean.mat, lambda.vec)
       }
-      penalized.mean.mat(Y, seg.mean.mat, lambda.vec)
     })
   },wbs.default=function(pro, param=NA){
     run.wbs(pro)

@@ -1,10 +1,4 @@
-works_with_R("3.2.2",
-             fpop="2014.7.16",
-             changepoint="2.2",
-             cghseg="1.0.2.1",
-             wbs="1.3",
-             stepR="1.0.3",
-             neuroblastoma="1.0")
+source("packages.R")
 
 ##system("sudo apt-get install libgsl0-dev")
 
@@ -30,13 +24,16 @@ annotations.by.id <- with(neuroblastoma, {
 })
 stopifnot(identical(names(profiles.by.id), names(annotations.by.id)))
 all.cids <- names(profiles.by.id)
+all.cids <- names(profiles.by.id)[1:100]
+chrom.order <- as.character(c(1,2,3,4,11,17))
 
 ## Run smoothers for all algos.
-for(clin.id.i in seq_along(profiles.by.id)){
+for(clin.id.i in seq_along(all.cids)){
   clin.id <- all.cids[[clin.id.i]]
   cat(sprintf("%4d / %4d profile=%s\n",
               clin.id.i, length(profiles.by.id), clin.id))
   one <- profiles.by.id[[clin.id]]
+  some.chroms <- subset(one, chromosome %in% chrom.order)
   these.labels <- annotations.by.id[[clin.id]]
   print(these.labels)
   for(a in algos){
@@ -49,7 +46,6 @@ for(clin.id.i in seq_along(profiles.by.id)){
 }
 
 all.stats <- list()
-chrom.order <- as.character(c(1,2,3,4,11,17))
 ## each all.stats array is nparam x nprofiles x nann
 for(a in algos){
   print(a)

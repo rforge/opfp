@@ -1,0 +1,14 @@
+Code to re-make figures from "On Optimal Multiple Changepoint
+Algorithms for Large Data" by Maidstone et al.
+
+| Figure                    | images     | code                                  |
+|---------------------------+------------+---------------------------------------|
+| 1 cost functions          |            |                                       |
+| 2 example                 |            |                                       |
+| 3 candidate functions     |            |                                       |
+| 4 candidates FPOP vs PELT |            |                                       |
+| 5 candidates pDPA vs SNIP |            |                                       |
+| 6 tumour timings          | [[file:figure-systemtime-arrays-bins.pdf][left]] [[file:figure-systemtime-arrays-fpop-pelt-small.pdf][right]] | [[file:figure-systemtime-arrays.R]]       |
+| 7 simulation timings      | [[file:figure-systemtime-simulation-lines.pdf][left]] [[file:figure-systemtime-simulationLarge-lines.pdf][right]] | [[file:figure-systemtime-simulation.R]]   |
+| 8 neuroblastoma accuracy  | [[file:figure-neuroblastoma-roc.pdf][left]] [[file:figure-neuroblastoma-test-error.pdf][right]] | [[file:table-neuroblastoma-test-error.R]] |
+

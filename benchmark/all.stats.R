@@ -24,7 +24,7 @@ annotations.by.id <- with(neuroblastoma, {
 })
 stopifnot(identical(names(profiles.by.id), names(annotations.by.id)))
 all.cids <- names(profiles.by.id)
-all.cids <- names(profiles.by.id)[1:100]
+##all.cids <- names(profiles.by.id)[1:100]
 chrom.order <- as.character(c(1,2,3,4,11,17))
 
 ## Run smoothers for all algos.

@@ -193,6 +193,26 @@ tikz("figure-neuroblastoma-test-error.tex", w=3.2, h=1.8)
 print(p)
 dev.off()
 
+p <- ggplot()+
+  theme_bw()+
+  guides(color="none")+
+  scale_x_continuous("test error, percent incorrect labels",
+                     limits=c(-5, max(percent.tall$percent)),
+                     breaks=seq(0, 20, by=5))+
+  geom_text(aes(0, algorithm,
+                color=algorithm,
+                label=sprintf("%.2f +/- %05.2f", mean, sd)),
+            data=percent.wide,
+            hjust=1,
+            size=3)+
+  geom_point(aes(percent, algorithm, color=algorithm),
+             pch=1,
+             data=percent.tall)+
+  scale_color_manual(values=algo.colors)
+pdf("figure-neuroblastoma-test-error.pdf", w=3.2, h=1.8)
+print(p)
+dev.off()
+
 t.test(percent.mat["FPOP", ], percent.mat["SMUCE", ],
        alternative="less", paired=TRUE)
 t.test(percent.mat["FPOP", ], percent.mat["WBS", ],

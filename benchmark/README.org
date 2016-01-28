@@ -3,11 +3,11 @@ Algorithms for Large Data" by Maidstone et al.
 
 | Figure                    | images     | code                                  |
 |---------------------------+------------+---------------------------------------|
-| 1 cost functions          |            |                                       |
-| 2 example                 |            |                                       |
-| 3 candidate functions     |            |                                       |
-| 4 candidates FPOP vs PELT |            |                                       |
-| 5 candidates pDPA vs SNIP |            |                                       |
+| 1 all cost functions      | [[file:Fig1-5/PDPAcandidatesallin.pdf][Figure 1]]   | [[file:Fig1-5/PDPAcandidatesallin.R]]     |
+| 2 pDPA cost functions     | [[file:Fig1-5/PDPAcandidates.pdf][Figure 2]]   | [[file:Fig1-5/PDPAcandidates.R]]          |
+| 3 FPOP cost functions     | [[file:Fig1-5/FPOPcandidates.pdf][Figure 3]]   | [[file:Fig1-5/FPOPcandidates.R]]          |
+| 4 candidates FPOP vs PELT | [[file:Fig1-5/ConsideredPELTandFPOP.pdf][Figure 4]]   | [[file:Fig1-5/ConsideredPELTandFPOP.R]]   |
+| 5 candidates pDPA vs SNIP | [[file:Fig1-5/ConsideredSNIPandPDPA.pdf][Figure 5]]   | [[file:Fig1-5/ConsideredSNIPandPDPA.R]]   |
 | 6 tumour timings          | [[file:figure-systemtime-arrays-bins.pdf][left]] [[file:figure-systemtime-arrays-fpop-pelt-small.pdf][right]] | [[file:figure-systemtime-arrays.R]]       |
 | 7 simulation timings      | [[file:figure-systemtime-simulation-lines.pdf][left]] [[file:figure-systemtime-simulationLarge-lines.pdf][right]] | [[file:figure-systemtime-simulation.R]]   |
 | 8 neuroblastoma accuracy  | [[file:figure-neuroblastoma-roc.pdf][left]] [[file:figure-neuroblastoma-test-error.pdf][right]] | [[file:table-neuroblastoma-test-error.R]] |

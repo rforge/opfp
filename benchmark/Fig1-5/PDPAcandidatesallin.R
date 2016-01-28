@@ -1,0 +1,7 @@
+setwd("~/Fig1-5")
+source("PDPA-plotall.R")  
+set.seed(123)
+y<-c(rnorm(60,2,1.5),rnorm(60,0,1))
+pdf("PDPAcandidatesallin.pdf",width=6,height=6)
+PDPAplotallin(y,2,55,2,1,4)
+dev.off()

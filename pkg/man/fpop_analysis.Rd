@@ -2,7 +2,8 @@
 \alias{fpop_analysis}
 \title{fpop analysis}
 \description{A function to count the number of intervals and or candidate segmentation at each step of fpop (under-developpemment)}
-\usage{fpop_analysis(x, lambda, mini = min(x), maxi = max(x))}\arguments{
+\usage{fpop_analysis(x, lambda, mini = min(x), maxi = max(x))}
+\arguments{
   \item{x}{A vector of double : the signal to be segmented}
   \item{lambda}{Value of the penalty}
   \item{mini}{Min value for the mean parameter of the segment}

@@ -16,12 +16,12 @@ i
 ### return a vector with the best change-points w.r.t. to L2 to go from point 1 to i
 }
 
-Fpop <- function
+Fpop <- structure(function
 ### Function calling the fpop algorithm, use functional pruning and
 ### optimal partionning to recover the best segmentation with respect
 ### to the L2 loss with a per change-point penalty of lambda. More
 ### precisely, this function computes the solution to argmin_m
-### sum_{i=1}^n (x_i-m_i)^2 + lambda * sum_{i=1}^{n-1} I(m_i \neq
+### sum_{i=1}^n (x_i-m_i)^2 + lambda * sum_{i=1}^{n-1} I(m_i !=
 ### m_{i+1}), where the indicator function I counts the number of
 ### changes in the mean vector m.
 (x, 
@@ -43,7 +43,26 @@ maxi=max(x)
     A$J.est <- A$cost[n] - (A$K+1)*lambda + sum(x^2)
     return(A);	
 ### return a list with a vector t.est containing the position of the change-points
-} 
+}, ex=function(){
+  set.seed(1)
+  N <- 100
+  data.vec <- c(rnorm(N), rnorm(N, 2), rnorm(N))
+  fit <- Fpop(data.vec, N)
+  end.vec <- fit$t.est
+  change.vec <- end.vec[-length(end.vec)]
+  start.vec <- c(1, change.vec+1)
+  segs.list <- list()
+  for(seg.i in seq_along(start.vec)){
+    start <- start.vec[seg.i]
+    end <- end.vec[seg.i]
+    segs.list[[seg.i]] <- data.frame(
+      start, end, mean=mean(data.vec[start:end]))
+  }
+  segs <- do.call(rbind, segs.list)
+  plot(data.vec)
+  with(segs, segments(start-0.5, mean, end+0.5, mean, col="green"))
+  with(segs[-1,], abline(v=start-0.5, col="green", lty="dotted"))
+})
 
 fpop_analysis <- function
 ### A function to count the number of intervals and or candidate segmentation at each step of fpop (under-developpemment)

@@ -12,7 +12,7 @@
 
 \value{return a list with a vector containing the position of the change-points t.est}
 
-\author{Guillem Rigaill}
+\author{Guillem Rigaill, Toby Dylan Hocking}
 
 
 

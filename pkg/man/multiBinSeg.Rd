@@ -10,7 +10,7 @@
 
 \value{return an object with the successive change-points found by binseg t.est and the L2 cost J.est}
 
-\author{Guillem Rigaill}
+\author{Guillem Rigaill, Toby Dylan Hocking}
 
 
 

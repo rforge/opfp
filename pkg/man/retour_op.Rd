@@ -10,7 +10,7 @@
 
 \value{return a vector with the best change-points w.r.t. to L2 to go from point 1 to i}
 
-\author{Guillem Rigaill}
+\author{Guillem Rigaill, Toby Dylan Hocking}
 
 
 

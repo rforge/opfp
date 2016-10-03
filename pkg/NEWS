@@ -1,3 +1,7 @@
+2016.10.03
+
+package and docs updates to pass R CMD check.
+
 2014.7.16
 
 multiBinSeg memory leak fixed.

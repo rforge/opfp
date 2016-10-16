@@ -1,3 +1,8 @@
+2016.10.16
+
+Remove GSL requirement, instead use INFINITY which is defined in
+math.h
+
 2016.10.03
 
 package and docs updates to pass R CMD check.

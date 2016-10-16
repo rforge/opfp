@@ -20,9 +20,6 @@
 #define LISTEH
 #include "polynome2.h"
 
-#include <gsl/gsl_math.h>
-#define NUMLIB_POSINF GSL_POSINF
-
 class Liste {
 private:
   double max, min;
@@ -212,8 +209,8 @@ void Liste::add(double a2_, double a1_, double a0_)
 void Liste::computeMinOrMax(double * min, int * which)
 {
   Liste *l;
-  double tmp = NUMLIB_POSINF;
-  *min = NUMLIB_POSINF;
+  double tmp = INFINITY;
+  *min = INFINITY;
   * which=-1;
   l=this;
   while(l != NULL)

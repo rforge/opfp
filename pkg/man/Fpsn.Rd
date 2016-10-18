@@ -9,7 +9,8 @@
 }
 }
 
-\value{return a list with a J.est vector containing the L2 loss and a t.est matrix with the changes of the segmentations in 1 to Kmax}
+\value{return a list with a J.est vector containing the L2 loss and a
+t.est matrix with the changes of the segmentations in 1 to Kmax}
 
 \author{Guillem Rigaill, Toby Dylan Hocking}
 

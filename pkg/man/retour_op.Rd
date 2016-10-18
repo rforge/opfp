@@ -1,14 +1,14 @@
 \name{retour_op}
 \alias{retour_op}
 \title{retour op}
-\description{This function is use by the fpop function to recover the best segmentation from 1:n from the C output}
-\usage{retour_op(path, i)}
+\description{This function is used by the Fpop function to recover the best
+segment ends from 1:n from the C output.}
+\usage{retour_op(path)}
 \arguments{
   \item{path}{the path vector of the "colibri_op_R_c C" function}
-  \item{i}{the last position to consider in the path vector}
 }
 
-\value{return a vector with the best change-points w.r.t. to L2 to go from point 1 to i}
+\value{a vector with the best segment ends.}
 
 \author{Guillem Rigaill, Toby Dylan Hocking}
 

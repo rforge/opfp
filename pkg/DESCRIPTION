@@ -1,9 +1,9 @@
 Package: fpop
 Type: Package
 Title: Segmentation using Optimal Partitioning and Function Pruning
-Version: 2016.10.16
-Depends: methods, cghseg
+Version: 2016.10.18
+Suggests: cghseg
 Author: Guillem Rigaill, Toby Dylan Hocking
 Maintainer: Guillem Rigaill <rigaill@evry.inra.fr>
-Description: A wrapper to a C implementation of optimal partionning with function pruning
+Description: A wrapper to a C implementation of optimal partitioning with function pruning.
 License: LGPL (>= 2.1)

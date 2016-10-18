@@ -1,19 +1,18 @@
 retour_op <- function
-### This function is use by the fpop function to recover the best segmentation from 1:n from the C output
-(path, 
+### This function is used by the Fpop function to recover the best
+### segment ends from 1:n from the C output.
+(path
 ### the path vector of the "colibri_op_R_c C" function
-i
-### the last position to consider in the path vector
 ){
    chaine <- integer(1)
    chaine[1] <- length(path)
    j <- 2
    while(chaine[j-1] > 0){
-	chaine[j] <- path[chaine[j-1]]
-	j=j+1	
-	}
-   return(rev(chaine)[-1])
-### return a vector with the best change-points w.r.t. to L2 to go from point 1 to i
+     chaine[j] <- path[chaine[j-1]]
+     j=j+1	
+   }
+   rev(chaine)[-1]
+### a vector with the best segment ends.
 }
 
 Fpop <- structure(function
@@ -38,11 +37,17 @@ maxi=max(x)
 		lambda=as.double(lambda),   min=as.double(mini), 
 		max=as.double(maxi), path=integer(n), cost=double(n)
 	, PACKAGE="fpop")
-    A$t.est <- retour_op(A$path, n)
+    A$t.est <- retour_op(A$path)
     A$K <- length(A$t.est)
     A$J.est <- A$cost[n] - (A$K+1)*lambda + sum(x^2)
     return(A);	
-### return a list with a vector t.est containing the position of the change-points
+### Named list with the following elements: input data (signal, n,
+### lambda, min, max), path (best previous segment end up to each data
+### point), cost (optimal penalized cost up to each data point), t.est
+### (vector of overall optimal segment ends), K (optimal number of
+### segments), J.est (total un-penalized cost of optimal model). To
+### see how cost relates to J.est, see definition of J.est in the R
+### source code for this function.
 }, ex=function(){
   set.seed(1)
   N <- 100
@@ -55,8 +60,12 @@ maxi=max(x)
   for(seg.i in seq_along(start.vec)){
     start <- start.vec[seg.i]
     end <- end.vec[seg.i]
+    seg.data <- data.vec[start:end]
+    seg.mean <- mean(seg.data)
     segs.list[[seg.i]] <- data.frame(
-      start, end, mean=mean(data.vec[start:end]))
+      start, end,
+      mean=seg.mean,
+      seg.cost=sum((seg.data-seg.mean)^2))
   }
   segs <- do.call(rbind, segs.list)
   plot(data.vec)
@@ -65,7 +74,8 @@ maxi=max(x)
 })
 
 fpop_analysis <- function
-### A function to count the number of intervals and or candidate segmentation at each step of fpop (under-developpemment)
+### A function to count the number of intervals and or candidate
+### segmentation at each step of fpop (under-developpemment)
 (x,
 ### A vector of double : the signal to be segmented
 lambda, 
@@ -75,12 +85,11 @@ mini=min(x),
 maxi=max(x)
 ### Max value for the mean parameter of the segment
 ){
-
-	n <- length(x)
-    A <- .C("colibri_op_R_c_analysis", signal=as.double(x), n=as.integer(n), lambda=as.double(lambda),   min=as.double(mini), max=as.double(maxi), path=integer(n), cost=double(n), nbCandidate=integer(n)
+  n <- length(x)
+  A <- .C("colibri_op_R_c_analysis", signal=as.double(x), n=as.integer(n), lambda=as.double(lambda),   min=as.double(mini), max=as.double(maxi), path=integer(n), cost=double(n), nbCandidate=integer(n)
 	, PACKAGE="fpop")
-    A$t.est <- retour_op(A$path, n)
-    return(A);	
+  A$t.est <- retour_op(A$path)
+  return(A);	
 ### return a list with a vector containing the position of the change-points t.est
 } 
 
@@ -89,10 +98,12 @@ Fpsn <- function
 ### Function to run the pDPA algorithm with the L2 loss (it is a wrapper to cghseg)
 (x, 
 ### A vector of double : the signal to be segmented
-Kmax
-){
-	cghseg:::segmeanCO(x, Kmax)
-### return a list with a J.est vector containing the L2 loss and a t.est matrix with the changes of the segmentations in 1 to Kmax
+ Kmax
+ ){
+  segmeanCO <- get("segmeanCO", envir=asNamespace("cghseg"))
+  segmeanCO(x, Kmax)
+### return a list with a J.est vector containing the L2 loss and a
+### t.est matrix with the changes of the segmentations in 1 to Kmax
 }
 
 

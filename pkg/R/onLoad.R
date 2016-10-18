@@ -1,5 +1,5 @@
-.onLoad <- function(lib, pkg, ...) {
- cat("Welcome to the fpop package.\n")
- cat("This package implement the fpop algorithm (http://arxiv.org/abs/1409.1842), \n")
- cat("see the Fpop function\n")
+.onAttach <- function(lib, pkg, ...) {
+  packageStartupMessage("Welcome to the fpop package.
+This package implements the FPOP algorithm (http://arxiv.org/abs/1409.1842),
+see the Fpop function.")
 }

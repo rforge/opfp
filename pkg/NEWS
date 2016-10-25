@@ -1,3 +1,9 @@
+2016.10.25
+
+Fixed
+* checking package dependencies ... ERROR
+Namespace dependency not required: ‘cghseg’
+
 2016.10.18
 
 Some improved documentation for the return values of Fpop.

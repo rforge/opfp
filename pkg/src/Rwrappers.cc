@@ -1,3 +1,5 @@
+/* Dear emacs, please set -*- compile-command: "R CMD INSTALL .." -*- */
+
 /* February 2014 Guillem Rigaill <rigaill@evry.inra.fr> 
 
    This file is part of the R package fpop
@@ -18,18 +20,30 @@
 */
 
 #include "colibri.h"
-#include<R_ext/Arith.h>
+#include <R_ext/Rdynload.h>
 
-// this function is visible by R
-extern "C" {
 void colibri_op_R_c (double *profil, int *nbi, double *lambda_, double *mini, double *maxi, int *origine,
-double *cout_n){
-    colibri_op_c (profil, nbi, lambda_, mini, maxi, origine, cout_n);
-  }
-
-void colibri_op_R_c_analysis (double *profil, int *nbi, double *lambda_, double *mini, double *maxi, int *origine,
-double *cout_n, int *nbcandidate){
-    colibri_op_c_analysis (profil, nbi, lambda_, mini, maxi, origine, cout_n, nbcandidate);
-  }
+		     double *cout_n){
+  colibri_op_c (profil, nbi, lambda_, mini, maxi, origine, cout_n);
 }
 
+void colibri_op_R_c_analysis (double *profil, int *nbi, double *lambda_, double *mini, double *maxi, int *origine,
+			      double *cout_n, int *nbcandidate){
+  colibri_op_c_analysis (profil, nbi, lambda_, mini, maxi, origine, cout_n, nbcandidate);
+}
+
+R_CMethodDef cMethods[] = {
+  {"colibri_op_R_c",(DL_FUNC) &colibri_op_R_c, 7},
+  {"colibri_op_R_c_analysis",(DL_FUNC) &colibri_op_R_c_analysis, 8},
+  {NULL, NULL, 0}
+};
+
+extern "C" {
+  void R_init_fpop(DllInfo *info) {
+    R_registerRoutines(info, cMethods, NULL, NULL, NULL);
+    //R_useDynamicSymbols call says the DLL is not to be searched for
+    //entry points specified by character strings so .C etc calls will
+    //only find registered symbols.
+    R_useDynamicSymbols(info, FALSE);
+  }
+}

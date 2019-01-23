@@ -94,17 +94,3 @@ maxi=max(x)
 } 
 
 
-Fpsn <- function
-### Function to run the pDPA algorithm with the L2 loss (it is a wrapper to cghseg)
-(x, 
-### A vector of double : the signal to be segmented
- Kmax
- ){
-  segmeanCO <- get("segmeanCO", envir=asNamespace("cghseg"))
-  segmeanCO(x, Kmax)
-### return a list with a J.est vector containing the L2 loss and a
-### t.est matrix with the changes of the segmentations in 1 to Kmax
-}
-
-
-

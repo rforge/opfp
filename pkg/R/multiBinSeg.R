@@ -12,8 +12,7 @@ multiBinSeg <- function
     nRow <- length(geno)
     nCol <- 1
   }
-  
-  A <- .C("Call_BinSeg", 
+  A <- .C("BinSeg_interface", 
           x_i= as.double((geno)),
           K= as.integer(Kmax),
           n= as.integer(nRow), 

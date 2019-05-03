@@ -19,6 +19,8 @@
    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#include <list>
+#include "BinSeg_MultiDim.h"
 #include "colibri.h"
 #include <R_ext/Rdynload.h>
 
@@ -32,7 +34,43 @@ void colibri_op_R_c_analysis (double *profil, int *nbi, double *lambda_, double 
   colibri_op_c_analysis (profil, nbi, lambda_, mini, maxi, origine, cout_n, nbcandidate);
 }
 
+void BinSeg_interface
+(double * dataVec_, int * Kmax_, int * n_, int * P_,
+ int * Ruptures_, double * RupturesCost_){
+  int n = *n_;
+  int P = *P_;
+  int Kmax = *Kmax_;
+  double ** data = new double*[n];
+  for(int i=0; i< n; i++)
+    data[i] = new double[P];
+  for(int i =0; i< n; i++)
+    for(int j=0; j < P; j++)
+      data[i][j] = dataVec_[i+ n*j];
+  BinSeg_MultiDim BinSegRun(data, n, P, 2*Kmax + 10);
+  BinSegRun.Initialize(Kmax);
+  int i=0;
+  for
+    (std::list<int>::iterator iter = BinSegRun.Ruptures.begin();
+     iter != BinSegRun.Ruptures.end(); iter++){
+    Ruptures_[i] = *iter;
+    i++;
+  }
+  i=0;
+  for
+    (std::list<double>::iterator iter = BinSegRun.RupturesCost.begin();
+     iter != BinSegRun.RupturesCost.end(); iter++){
+    RupturesCost_[i] = *iter;
+    i++;
+  }
+  // delete
+  for(int i = 0; i<n; i++)
+    delete[] data[i];
+  delete[] data;	
+}
+
+
 R_CMethodDef cMethods[] = {
+  {"BinSeg_interface",(DL_FUNC) &BinSeg_interface, 6},
   {"colibri_op_R_c",(DL_FUNC) &colibri_op_R_c, 7},
   {"colibri_op_R_c_analysis",(DL_FUNC) &colibri_op_R_c_analysis, 8},
   {NULL, NULL, 0}

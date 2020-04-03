@@ -1,3 +1,8 @@
+2020.4.3 TDH
+
+fix memory leak (remove delete poly from Liste destructor, only delete
+next if it is not NULL).
+
 2019.05.03
 
 Register BinSeg_interface in src/Rwrappers.cc -- this function is used

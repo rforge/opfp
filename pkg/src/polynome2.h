@@ -251,9 +251,8 @@ void Polynome2::add(double a2_, double a1_, double a0_)
 /* print and others */
 void Polynome2::show()
 {
-
-   //std::cout << this->geta2() << " x^2 + " << this->geta1() << " x + " << this->geta0() << std::endl;
-   //std::cout << "Rc1 : " << this->getRacine1() << " , Rc2 : " << this->getRacine2() << ", St : " << this->getStatus() << ", Or : " << this->getOrigine() << std::endl;
-   //std::cout << "-----------------------" <<std::endl;
+   // std::cout << this->geta2() << " x^2 + " << this->geta1() << " x + " << this->geta0() << std::endl;
+   // std::cout << "Rc1 : " << this->getRacine1() << " , Rc2 : " << this->getRacine2() << ", St : " << this->getStatus() << ", Or : " << this->getOrigine() << std::endl;
+   // std::cout << "-----------------------" <<std::endl;
 }
 #endif //POLYNOME2H

@@ -50,27 +50,25 @@ double *cout_n)
 	
 	l1 = new Liste(max, min, stock[0]);
 
-	l1->computeMinOrMax(&minCurrent, &minPosition);
-	cout_n[0] = minCurrent + lambda;
-	origine[0] = minPosition;
         /* For any new data point t do 1), 2) and 3) */
-	for ( int t =1; t < nb; t++ ){
-        	 /* Slide 1 and Prune */
-		 l1->computeRoots(cout_n[t-1]);
-		 stock[t]->reset(0.0, 0.0, cout_n[t-1],  t);
-		 l1->resetAllBorders(stock[t]);
-		 l1->checkForDoublon();
-		 l1->add(1.0, -2*profil[t], 0.0);
-
-		 /* Compute Min */
-		 l1->computeMinOrMax(&minCurrent, &minPosition);
-		 cout_n[t]=minCurrent + lambda;
-		 origine[t] = minPosition;	
+	for ( int t =0; t < nb; t++ ){
+	  if(0 < t){
+	    /* Slide 1 and Prune */
+	    l1->computeRoots(cout_n[t-1]);
+	    stock[t]->reset(0.0, 0.0, cout_n[t-1],  t);
+	    l1->resetAllBorders(stock[t]);
+	    l1->checkForDoublon();
+	    l1->add(1.0, -2*profil[t], 0.0);
+	  }
+	  l1->computeMinOrMax(&minCurrent, &minPosition);
+	  cout_n[t]=minCurrent + lambda;
+	  origine[t] = minPosition;	
 	}
 	  
 	/* free stock */
 	for ( int t =0; t < nb; t++ ) delete(stock[t]);
-	delete[] stock;  
+	delete[] stock;
+	delete l1;
 }
 
 // count the number of candidate

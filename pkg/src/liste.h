@@ -36,8 +36,7 @@ public:
   Liste(Polynome2 *poly_)
   : max(0.), min(0.), next(NULL), poly(poly_) {}
   ~Liste(){
-    delete next;
-    delete poly;
+    if(next != NULL)delete next;
   }
   /* fonction setter and getter */
   inline

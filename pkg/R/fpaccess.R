@@ -33,14 +33,15 @@ maxi=max(x)
 ### Max value for the mean parameter of the segment
 ){
   n <- length(x)
-  A <- .C("colibri_op_R_c", signal=as.double(x), n=as.integer(n), 
-		lambda=as.double(lambda),   min=as.double(mini), 
-		max=as.double(maxi), path=integer(n), cost=double(n)
-	, PACKAGE="fpop")
-    A$t.est <- retour_op(A$path)
-    A$K <- length(A$t.est)
-    A$J.est <- A$cost[n] - (A$K+1)*lambda + sum(x^2)
-    return(A);	
+  A <- .C(
+    "colibri_op_R_c", signal=as.double(x), n=as.integer(n), 
+    lambda=as.double(lambda),   min=as.double(mini), 
+    max=as.double(maxi), path=integer(n), cost=double(n),
+    PACKAGE="fpop")
+  A$t.est <- retour_op(A$path)
+  A$K <- length(A$t.est)
+  A$J.est <- A$cost[n] - (A$K+1)*lambda + sum(x^2)
+  A
 ### Named list with the following elements: input data (signal, n,
 ### lambda, min, max), path (best previous segment end up to each data
 ### point), cost (optimal penalized cost up to each data point), t.est

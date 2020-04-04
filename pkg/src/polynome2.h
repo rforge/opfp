@@ -169,7 +169,9 @@ void Polynome2::minOrMax(double *minOrMax, double *tmp, int *origine_)
 	
 	if(this->getStatus() != 0)
 	{
-		
+	  //a0 = constant
+	  //a1 = linear
+	  //a2 = quadratic
 		*tmp = -0.25 * a1*a1 / (a2) + (a0) ;
 		//cout << "Min : " << *tmp << ", " << this->getOrigine() <<"\n";
 		if((*tmp) < (*minOrMax) )

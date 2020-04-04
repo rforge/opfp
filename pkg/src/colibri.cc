@@ -45,7 +45,7 @@ double *cout_n)
 		
          
 	/* Parametrization of the first candidate segmentation (i.e 1 segment from ]0, 1] the min cost is (0 + lambda)  */
-	stock[0]->reset(1.0, -2*profil[0], lambda,  -10);
+	stock[0]->reset(1.0, -2*profil[0], 0.0,  -10);
 	stock[0]->setStatus(2);
 	
 	l1 = new Liste(max, min, stock[0]);

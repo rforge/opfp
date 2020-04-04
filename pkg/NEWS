@@ -3,6 +3,10 @@
 fix memory leak (remove delete poly from Liste destructor, only delete
 next if it is not NULL).
 
+fix cost computation and docs, now J.est is the total square loss and
+the cost is the total square loss plus the penalty constant times the
+number of segments.
+
 2019.05.03
 
 Register BinSeg_interface in src/Rwrappers.cc -- this function is used

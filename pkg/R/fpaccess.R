@@ -20,9 +20,10 @@ Fpop <- structure(function
 ### optimal partionning to recover the best segmentation with respect
 ### to the L2 loss with a per change-point penalty of lambda. More
 ### precisely, this function computes the solution to argmin_m
-### sum_{i=1}^n (x_i-m_i)^2 + lambda * sum_{i=1}^{n-1} I(m_i !=
-### m_{i+1}), where the indicator function I counts the number of
-### changes in the mean vector m.
+### sum_{i=1}^n (x_i-m_i)^2 + lambda * sum_{i=1}^{n-1} [1+I(m_i !=
+### m_{i+1})], where the indicator function I counts the number of
+### changes in the mean vector m, so the total penalty term is
+### equivalent to the number of segments.
 (x, 
 ### A vector of double : the signal to be segmented
 lambda, 
@@ -40,15 +41,18 @@ maxi=max(x)
     PACKAGE="fpop")
   A$t.est <- retour_op(A$path)
   A$K <- length(A$t.est)
-  A$J.est <- A$cost[n] - (A$K+1)*lambda + sum(x^2)
+  A$J.est <- A$cost[n] - A$K*lambda + sum(x^2)
   A
 ### Named list with the following elements: input data (signal, n,
 ### lambda, min, max), path (best previous segment end up to each data
-### point), cost (optimal penalized cost up to each data point), t.est
-### (vector of overall optimal segment ends), K (optimal number of
-### segments), J.est (total un-penalized cost of optimal model). To
-### see how cost relates to J.est, see definition of J.est in the R
-### source code for this function.
+### point), cost (optimal penalized cost up to each data point, where
+### loss is the square loss without the constant term and the penalty
+### is lambda times the number of segments), t.est (vector of overall
+### optimal segment ends), K (optimal number of segments), J.est
+### (total un-penalized cost of optimal model, aka total square
+### loss). To see how cost relates to J.est, see definition of J.est
+### in the R source code for this function. (last cost = J.est -
+### sum.of.squares + K*lambda)
 }, ex=function(){
   set.seed(1)
   N <- 100

@@ -71,6 +71,7 @@ double *cout_n)
 	/* free stock */
 	for ( int t =0; t < nb; t++ ) delete(stock[t]);
 	delete[] stock;  
+	delete l1;
 }
 
 // count the number of candidate

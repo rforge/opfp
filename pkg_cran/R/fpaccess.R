@@ -39,7 +39,8 @@ maxi=max(x)
 	, PACKAGE="fpop")
     A$t.est <- retour_op(A$path)
     A$K <- length(A$t.est)
-    A$J.est <- A$cost[n] - (A$K+1)*lambda + sum(x^2)
+    ## A$J.est <- A$cost[n] - (A$K+1)*lambda + sum(x^2)
+    A$J.est <- A$cost[n] - A$K*lambda + sum(x^2)
     return(A);	
 ### Named list with the following elements: input data (signal, n,
 ### lambda, min, max), path (best previous segment end up to each data

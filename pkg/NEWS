@@ -1,3 +1,7 @@
+2020.4.8 TDH
+
+update DESCRIPTION Authors@R, Description from CRAN version.
+
 2020.4.3 TDH
 
 fix memory leak (remove delete poly from Liste destructor, only delete

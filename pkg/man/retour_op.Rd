@@ -10,7 +10,7 @@ segment ends from 1:n from the C output.}
 
 \value{a vector with the best segment ends.}
 
-\author{Guillem Rigaill, Toby Dylan Hocking}
+\author{Guillem Rigaill <guillem.rigaill@inra.fr> [aut, cre], Toby Hocking [aut], Robert Maidstone [aut], Michel Koskas [ctb], Paul Fearnhead [aut]}
 
 
 

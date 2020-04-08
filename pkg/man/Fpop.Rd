@@ -29,7 +29,7 @@ loss). To see how cost relates to J.est, see definition of J.est
 in the R source code for this function. (last cost = J.est -
 sum.of.squares + K*lambda)}
 
-\author{Guillem Rigaill, Toby Dylan Hocking}
+\author{Guillem Rigaill <guillem.rigaill@inra.fr> [aut, cre], Toby Hocking [aut], Robert Maidstone [aut], Michel Koskas [ctb], Paul Fearnhead [aut]}
 
 
 

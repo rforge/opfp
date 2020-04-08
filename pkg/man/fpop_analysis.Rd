@@ -14,7 +14,7 @@ segmentation at each step of fpop (under-developpemment)}
 
 \value{return a list with a vector containing the position of the change-points t.est}
 
-\author{Guillem Rigaill, Toby Dylan Hocking}
+\author{Guillem Rigaill <guillem.rigaill@inra.fr> [aut, cre], Toby Hocking [aut], Robert Maidstone [aut], Michel Koskas [ctb], Paul Fearnhead [aut]}
 
 
 
